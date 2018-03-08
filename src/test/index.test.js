@@ -9,7 +9,7 @@ const code = `import h from 'react-hyperscript'
 const StatelessComponent = (props) => h('h1')
 
 const StatelessWithReturn = (props) => {
-  return h('h1')
+  return h('.class')
 }  
 
 function named(props) {

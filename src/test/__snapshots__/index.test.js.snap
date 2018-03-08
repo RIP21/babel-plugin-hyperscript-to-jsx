@@ -7,7 +7,7 @@ import h from 'react-hyperscript'
 const StatelessComponent = (props) => h('h1')
 
 const StatelessWithReturn = (props) => {
-  return h('h1')
+  return h('.class')
 }  
 
 function named(props) {
@@ -38,7 +38,7 @@ import h from 'react-hyperscript';
 const StatelessComponent = props => <h1 />;
 
 const StatelessWithReturn = props => {
-  return <h1 />;
+  return <div className=\\"class\\" />;
 };
 
 function named(props) {

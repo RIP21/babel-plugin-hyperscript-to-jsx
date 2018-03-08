@@ -36,7 +36,7 @@ const bJsxCloseElem = name => t.JSXClosingElement(bJsxIdent(name));
 
 // Builds self closed element
 const bJsxElem = ({
-  name,
+  name = 'div',
   attributes = [],
   children = [],
   selfClosing = false
@@ -150,14 +150,6 @@ const threeArgumentsCase = (firstArg, secondArg, thirdArg) => {
 module.exports = function() {
   return {
     visitor: {
-      ImportDeclaration(path) {
-        isHyperscriptInScope = t.isStringLiteral(path.node.source, {
-          value: "react-hyperscript"
-        });
-        if (!isHyperscriptInScope) {
-          return;
-        }
-      },
       CallExpression(path) {
         const { node } = path;
         const isHyperscriptCall = t.isIdentifier(node.callee, {
