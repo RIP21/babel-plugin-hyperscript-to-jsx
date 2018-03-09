@@ -46,7 +46,7 @@ pluginTester({
     prettier.format(output, { semi: true, singleQuote: true }),
   tests: [
     {
-      code: code
+      code
     }
   ]
 });

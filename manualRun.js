@@ -1,5 +1,5 @@
 const babel = require("babel-core");
-const prettier = require("prettier")
+const prettier = require("prettier");
 
 const result = prettier.format(
   babel.transform(
@@ -8,7 +8,7 @@ const result = prettier.format(
 const StatelessComponent = (props) => h('h1')
 
 const StatelessWithReturn = (props) => {
-  return h('.class')
+  return h('.class', { shouldRender: lol.length > 0 })
 }  
 
 function named(props) {
@@ -24,7 +24,7 @@ class Comp extends React.Component {
       h("div", [h("div", "Some content")]),
       h("h1#heading", "This is hyperscript"),
       h("h2", "creating React.js markup"),
-      h(AnotherComponent, { foo: "bar", bar: () => ({}) }, [
+      h(AnotherComponent, { foo: "bar", bar: () => ({}), shouldRender: thing.length > 0 }, [
         h("li", [h("a", { href: "http://whatever.com" }, "One list item")]),
         h("li", "Another list item")
       ])
@@ -32,8 +32,14 @@ class Comp extends React.Component {
   }
 }
 `,
-    { plugins: ["./src/index.js", "transform-object-rest-spread"] }
-  ).code
-, { semi: false, singleQuote: true });
+    {
+      plugins: [
+        ["./src/index.js", { revolut: true }],
+        "transform-object-rest-spread"
+      ]
+    }
+  ).code,
+  { semi: false, singleQuote: true }
+);
 
-console.log(result)
+console.log(result);

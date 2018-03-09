@@ -2,12 +2,8 @@
 
 const t = require("babel-core").types;
 const getTagAndClassNamesAndId = require("./utils").getTagAndClassNamesAndId;
-const revTransform = require('./rev')
-const getOption = require("./utils").getOption;
 
 // utility functions that starts with b means build.
-
-let isHyperscriptInScope = false;
 
 const bJsxAttr = (prop, expressionOrValue) => {
   const stringOrExpression = t.isStringLiteral(expressionOrValue)
@@ -17,16 +13,14 @@ const bJsxAttr = (prop, expressionOrValue) => {
 };
 
 const bJsxAttributes = objectExpression => {
-  return objectExpression.properties.map((node) => {
-      const { key, value, argument } = node
-      if(t.isSpreadProperty(node)) {
-        return t.JSXSpreadAttribute(argument)
-      }
-      else {
-        return bJsxAttr(key, value)
-      }
+  return objectExpression.properties.map(node => {
+    const { key, value, argument } = node;
+    if (t.isSpreadProperty(node)) {
+      return t.JSXSpreadAttribute(argument);
+    } else {
+      return bJsxAttr(key, value);
     }
-  );
+  });
 };
 
 const bJsxOpenElem = ({ name, selfClosing = false, attributes = [] }) =>
@@ -38,7 +32,7 @@ const bJsxCloseElem = name => t.JSXClosingElement(bJsxIdent(name));
 
 // Builds self closed element
 const bJsxElem = ({
-  name = 'div',
+  name = "div",
   attributes = [],
   children = [],
   selfClosing = false
@@ -60,14 +54,21 @@ const closeComponent = (jsxElem, children) => {
 };
 
 const injectChildren = (jsxElem, node) => {
+  let result;
   if (t.isArrayExpression(node)) {
-    return closeComponent(jsxElem, transformChildrenArray(jsxElem, node));
+    result = transformChildrenArray(jsxElem, node);
   }
   if (t.isStringLiteral(node)) {
-    return closeComponent(jsxElem, [t.JSXText(node.value)]);
+    result = [t.JSXText(node.value)];
   }
-  if (t.isExpression(node)) {
-    return closeComponent(jsxElem, [t.JSXExpressionContainer(node)]);
+  if (t.isExpression(node) && !result) {
+    result = [t.JSXExpressionContainer(node)];
+  }
+  if (t.isJSXExpressionContainer(jsxElem)) {
+    closeComponent(jsxElem.expression.right, result);
+    return jsxElem;
+  } else {
+    return closeComponent(jsxElem, result);
   }
 };
 
@@ -134,13 +135,29 @@ const twoArgumentsCase = (firstArg, secondArg, thirdArgIsAbsent) => {
     const props = bJsxAttributes(secondArg);
     const currentProps = jsxElem.openingElement.attributes;
     jsxElem.openingElement.attributes = [...currentProps, ...props];
+    const isShouldBePrepended = props.find(
+      prop => prop.name && prop.name.name === "shouldRender"
+    );
+    if (isShouldBePrepended) {
+      const shouldRenderExpression = props.find(
+        prop => prop.name.name === "shouldRender"
+      ).value.expression;
+      const logicalExpression = t.LogicalExpression(
+        "&&",
+        shouldRenderExpression,
+        jsxElem
+      );
+      const jsxExprContainer = t.JSXExpressionContainer(logicalExpression);
+      return jsxExprContainer;
+    }
     return jsxElem;
   }
+
   if (thirdArgIsAbsent) {
     return injectChildren(jsxElem, secondArg);
   } else {
-    jsxElem.openingElement.attributes.push(t.JSXSpreadAttribute(secondArg))
-    return jsxElem
+    jsxElem.openingElement.attributes.push(t.JSXSpreadAttribute(secondArg));
+    return jsxElem;
   }
 };
 
@@ -149,24 +166,11 @@ const threeArgumentsCase = (firstArg, secondArg, thirdArg) => {
   return injectChildren(jsxElem, thirdArg);
 };
 
-module.exports = function() {
-  return {
-    visitor: {
-      CallExpression(path, state) {
-        const { node } = path;
-        const isHyperscriptCall = t.isIdentifier(node.callee, {
-          name: "h"
-        });
-        const isTopLevelCall =
-          t.isReturnStatement(path.container) ||
-          t.isArrowFunctionExpression(path.container);
-        if (isHyperscriptCall && isTopLevelCall) {
-          let result = node;
-          const isRevolut = getOption(state, "revolut", false);
-          result = isRevolut ? revTransform(node, state) : transformHyperscriptToJsx(node);
-          path.replaceWith(result);
-        }
-      }
-    }
-  };
+module.exports = function uglyRevTransform(node) {
+  let result;
+  result = transformHyperscriptToJsx(node);
+  if (t.isJSXExpressionContainer(result)) {
+    result = result.expression;
+  }
+  return result;
 };

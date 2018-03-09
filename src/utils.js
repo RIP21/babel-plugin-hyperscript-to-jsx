@@ -34,6 +34,13 @@ const getTagAndClassNamesAndId = string => {
   }
 };
 
+function getOption({ opts }, name, defaultValue = true) {
+  return opts[name] === undefined || opts[name] === null
+    ? defaultValue
+    : opts[name];
+}
+
 module.exports = {
+  getOption,
   getTagAndClassNamesAndId
 };
