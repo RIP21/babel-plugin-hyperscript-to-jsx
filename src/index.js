@@ -2,12 +2,10 @@
 
 const t = require("babel-core").types;
 const getTagAndClassNamesAndId = require("./utils").getTagAndClassNamesAndId;
-const revTransform = require('./rev')
+const revTransform = require("./rev");
 const getOption = require("./utils").getOption;
-
-// utility functions that starts with b means build.
-
 let isHyperscriptInScope = false;
+// utility functions that starts with b means build.
 
 const bJsxAttr = (prop, expressionOrValue) => {
   const stringOrExpression = t.isStringLiteral(expressionOrValue)
@@ -17,16 +15,14 @@ const bJsxAttr = (prop, expressionOrValue) => {
 };
 
 const bJsxAttributes = objectExpression => {
-  return objectExpression.properties.map((node) => {
-      const { key, value, argument } = node
-      if(t.isSpreadProperty(node)) {
-        return t.JSXSpreadAttribute(argument)
-      }
-      else {
-        return bJsxAttr(key, value)
-      }
+  return objectExpression.properties.map(node => {
+    const { key, value, argument } = node;
+    if (t.isSpreadProperty(node)) {
+      return t.JSXSpreadAttribute(argument);
+    } else {
+      return bJsxAttr(key, value);
     }
-  );
+  });
 };
 
 const bJsxOpenElem = ({ name, selfClosing = false, attributes = [] }) =>
@@ -38,7 +34,7 @@ const bJsxCloseElem = name => t.JSXClosingElement(bJsxIdent(name));
 
 // Builds self closed element
 const bJsxElem = ({
-  name = 'div',
+  name = "div",
   attributes = [],
   children = [],
   selfClosing = false
@@ -139,8 +135,8 @@ const twoArgumentsCase = (firstArg, secondArg, thirdArgIsAbsent) => {
   if (thirdArgIsAbsent) {
     return injectChildren(jsxElem, secondArg);
   } else {
-    jsxElem.openingElement.attributes.push(t.JSXSpreadAttribute(secondArg))
-    return jsxElem
+    jsxElem.openingElement.attributes.push(t.JSXSpreadAttribute(secondArg));
+    return jsxElem;
   }
 };
 
@@ -152,19 +148,48 @@ const threeArgumentsCase = (firstArg, secondArg, thirdArg) => {
 module.exports = function() {
   return {
     visitor: {
-      CallExpression(path, state) {
-        const { node } = path;
-        const isHyperscriptCall = t.isIdentifier(node.callee, {
-          name: "h"
+      Program(path) {
+        isHyperscriptInScope = path.node.body.find(arg => {
+          if (t.isVariableDeclaration(arg)) {
+            return (
+              arg.declarations.find(
+                declaration => declaration.id.name === "h"
+              ) || false
+            );
+          }
+          if (t.isImportDeclaration(arg)) {
+            return (
+              arg.specifiers.find(specifier => specifier.local.name === "h") ||
+              false
+            );
+          }
         });
-        const isTopLevelCall =
-          t.isReturnStatement(path.container) ||
-          t.isArrowFunctionExpression(path.container);
-        if (isHyperscriptCall && isTopLevelCall) {
-          let result = node;
-          const isRevolut = getOption(state, "revolut", false);
-          result = isRevolut ? revTransform(node, state) : transformHyperscriptToJsx(node);
-          path.replaceWith(result);
+        if (isHyperscriptInScope) {
+          path.node.body.unshift(
+            t.ImportDeclaration(
+              [t.ImportDefaultSpecifier(t.Identifier("React"))],
+              t.StringLiteral("react")
+            )
+          );
+        }
+      },
+      CallExpression(path, state) {
+        if (isHyperscriptInScope) {
+          const { node } = path;
+          const isHyperscriptCall = t.isIdentifier(node.callee, {
+            name: "h"
+          });
+          const isTopLevelCall =
+            t.isReturnStatement(path.container) ||
+            t.isArrowFunctionExpression(path.container);
+          if (isHyperscriptCall && isTopLevelCall) {
+            let result = node;
+            const isRevolut = getOption(state, "revolut", false);
+            result = isRevolut
+              ? revTransform(node, state)
+              : transformHyperscriptToJsx(node);
+            path.replaceWith(result);
+          }
         }
       }
     }
