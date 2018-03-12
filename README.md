@@ -1,4 +1,5 @@
 # babel-plugin-hyperscript-to-jsx (codmod usage)
+[![npm version](https://badge.fury.io/js/babel-plugin-hyperscript-to-jsx.svg)](https://badge.fury.io/js/babel-plugin-hyperscript-to-jsx)
 
 It's a quite complex codemod to migrate from hyperscript to JSX.
 
@@ -78,26 +79,13 @@ class Comp extends React.Component {
 ## Usage
 
 I will write usage later. But go to [babel-codmod](https://github.com/square/babel-codemod) for usage.
-May require to include several `syntax` babel plugins along the way if you use static class fields, spreads etc.
-All this stuff is supported by plugin but does'nt explicitly dependent on them.
-Possible list of them:
 
-```json
-{
-  "plugins": [
-    "syntax-async-generators",
-    "syntax-class-properties",
-    "syntax-decorators",
-    "syntax-do-expressions",
-    "syntax-dynamic-import",
-    "syntax-flow",
-    "syntax-function-bind",
-    "syntax-function-sent",
-    "syntax-jsx",
-    "syntax-object-rest-spread"
-  ]
-}
-```
+Something like that probably will work:
+
+`codemod --plugin hyperscript-to-jsx ./src` or directly from `./node_modules/babel-plugin-hyperscript-to-jsx/src/index.js`
+
+If there will be any issues, follow the error prompts, more likely it will ask you to add some plugins like rest-spread etc. to your .babelrc
+This plugin support them, but doesn't depend on them, so make sure to solve this puzzle by yourself.
 
 ## Limitations
 

@@ -37,10 +37,6 @@ class Comp extends React.Component {
 pluginTester({
   pluginName: "hyperscript-to-jsx",
   plugin: hyperToJsxTransform,
-  babelOptions: {
-    filename: '.babelrc',
-    babelrc: true
-  },
   snapshot: true,
   formatResult: output =>
     prettier.format(output, { semi: true, singleQuote: true }),

@@ -33,32 +33,7 @@ class Comp extends React.Component {
 }
 `,
     {
-      plugins: [
-        [
-          "./src/index.js",
-          { revolut: true }
-          // require("babel-plugin-syntax-async-generators"),
-          // require("babel-plugin-syntax-class-properties"),
-          // require("babel-plugin-syntax-decorators"),
-          // require("babel-plugin-syntax-do-expressions"),
-          // require("babel-plugin-syntax-dynamic-import"),
-          // require("babel-plugin-syntax-flow"),
-          // require("babel-plugin-syntax-function-bind"),
-          // require("babel-plugin-syntax-function-sent"),
-          // require("babel-plugin-syntax-jsx"),
-          // require("babel-plugin-syntax-object-rest-spread")
-        ],
-        "syntax-async-generators",
-        "syntax-class-properties",
-        "syntax-decorators",
-        "syntax-do-expressions",
-        "syntax-dynamic-import",
-        "syntax-flow",
-        "syntax-function-bind",
-        "syntax-function-sent",
-        "syntax-jsx",
-        "syntax-object-rest-spread"
-      ]
+      plugins: [["./src/index.js", { revolut: true }]]
     }
   ).code,
   { semi: false, singleQuote: true }
