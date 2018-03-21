@@ -82,7 +82,7 @@ I will write usage later. But go to [babel-codmod](https://github.com/square/bab
 
 Something like that probably will work:
 
-`codemod --plugin hyperscript-to-jsx ./src` or directly from `./node_modules/babel-plugin-hyperscript-to-jsx/src/index.js`
+`codemod --plugin hyperscript-to-jsx ./src` or directly from node_modules hence `codemod --plugin ./node_modules/babel-plugin-hyperscript-to-jsx/src/index.js ./src`
 
 If there will be any issues, follow the error prompts, more likely it will ask you to add some plugins like rest-spread etc. to your .babelrc
 This plugin support them, but doesn't depend on them, so make sure to solve this puzzle by yourself.

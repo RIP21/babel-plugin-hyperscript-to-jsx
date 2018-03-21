@@ -17,7 +17,7 @@ const bJsxAttr = (prop, expressionOrValue) => {
 const bJsxAttributes = objectExpression => {
   return objectExpression.properties.map(node => {
     const { key, value, argument } = node;
-    if (t.isSpreadProperty(node)) {
+    if (t.isSpreadProperty(node) || t.isSpreadElement(node)) {
       return t.JSXSpreadAttribute(argument);
     } else {
       return bJsxAttr(key, value);
