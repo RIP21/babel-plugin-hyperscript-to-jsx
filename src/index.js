@@ -41,7 +41,7 @@ const bJsxElem = ({
 }) =>
   t.JSXElement(
     bJsxOpenElem({ attributes, name, selfClosing }),
-    selfClosing ? bJsxCloseElem(name) : null,
+    selfClosing ? null : bJsxCloseElem(name),
     children,
     selfClosing
   );
@@ -148,16 +148,16 @@ const threeArgumentsCase = (firstArg, secondArg, thirdArg) => {
 module.exports = function() {
   return {
     manipulateOptions(opts, parserOpts) {
-      parserOpts.plugins.push("asyncGenerators")
-      parserOpts.plugins.push("classProperties")
-      parserOpts.plugins.push("decorators")
-      parserOpts.plugins.push("doExpressions")
-      parserOpts.plugins.push("dynamicImport")
-      parserOpts.plugins.push("flow")
-      parserOpts.plugins.push("functionBind")
-      parserOpts.plugins.push("functionSent")
-      parserOpts.plugins.push("jsx")
-      parserOpts.plugins.push("objectRestSpread")
+      parserOpts.plugins.push("asyncGenerators");
+      parserOpts.plugins.push("classProperties");
+      parserOpts.plugins.push("decorators");
+      parserOpts.plugins.push("doExpressions");
+      parserOpts.plugins.push("dynamicImport");
+      parserOpts.plugins.push("flow");
+      parserOpts.plugins.push("functionBind");
+      parserOpts.plugins.push("functionSent");
+      parserOpts.plugins.push("jsx");
+      parserOpts.plugins.push("objectRestSpread");
     },
     visitor: {
       Program(path) {

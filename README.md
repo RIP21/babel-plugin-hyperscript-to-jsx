@@ -78,14 +78,23 @@ class Comp extends React.Component {
 
 ## Usage
 
-I will write usage later. But go to [babel-codmod](https://github.com/square/babel-codemod) for usage.
+Install [babel-codemod](https://github.com/square/babel-codemod) `npm i -g babel-codemod`
 
-Something like that probably will work:
+Then install in root of your project `npm install babel-plugin-hyperscript-to-jsx`
 
-`codemod --plugin hyperscript-to-jsx ./src` or directly from node_modules hence `codemod --plugin ./node_modules/babel-plugin-hyperscript-to-jsx/src/index.js ./src`
+Run it like that from node_modules hence:
+```
+codemod --plugin ./node_modules/babel-plugin-hyperscript-to-jsx/src/index.js ./src
+```
 
-If there will be any issues, follow the error prompts, more likely it will ask you to add some plugins like rest-spread etc. to your .babelrc
-This plugin support them, but doesn't depend on them, so make sure to solve this puzzle by yourself.
+Also you may like to pretty print it using prettier instead of recast
+```
+codemod --plugin ./node_modules/babel-plugin-hyperscript-to-jsx/src/index.js ./src --printer prettier
+```
+
+Remove `babel-plugin-hyperscript-to-jsx` from `package.json`
+
+If there is any issues, let me know in the issues tab here at GitHub.
 
 ## Limitations
 

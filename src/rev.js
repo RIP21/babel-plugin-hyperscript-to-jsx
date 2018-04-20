@@ -39,7 +39,7 @@ const bJsxElem = ({
 }) =>
   t.JSXElement(
     bJsxOpenElem({ attributes, name, selfClosing }),
-    selfClosing ? bJsxCloseElem(name) : null,
+    selfClosing ? null : bJsxCloseElem(name),
     children,
     selfClosing
   );
