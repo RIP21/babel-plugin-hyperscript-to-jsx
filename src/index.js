@@ -7,10 +7,11 @@ const getOption = require("./utils").getOption;
 let isHyperscriptInScope = false;
 // utility functions that starts with b means build.
 
-const isHyperscriptCall = node =>
-  t.isIdentifier(node.callee, {
+const isHyperscriptCall = node => {
+  return t.isIdentifier(node.callee, {
     name: "h"
   });
+};
 
 const bJsxAttr = (prop, expressionOrValue) => {
   const attributeName = t.isStringLiteral(prop)
@@ -78,7 +79,7 @@ const closeComponent = (jsxElem, children) => {
 
 const injectChildren = (jsxElem, node) => {
   if (t.isArrayExpression(node)) {
-    return closeComponent(jsxElem, transformChildrenArray(jsxElem, node));
+    return closeComponent(jsxElem, transformChildrenArray(node));
   }
   if (t.isStringLiteral(node)) {
     return closeComponent(jsxElem, [t.JSXText(node.value)]);
@@ -88,8 +89,12 @@ const injectChildren = (jsxElem, node) => {
   }
 };
 
-const transformChildrenArray = (jsxElem, node) => {
+const transformChildrenArray = (node, noExpressionContainers) => {
   return node.elements.map(element => {
+    // Ugliest hack I ever wrote, but this is to avoid putting computed hyperscript calls into the JSXExpressionContainer for ignored computed root h calls
+    if(isHyperscriptCall(element) && noExpressionContainers && element.arguments && element.arguments[0] && element.arguments[0].computed) {
+      return element
+    }
     if (isHyperscriptCall(element)) {
       return transformHyperscriptToJsx(element, false);
     }
@@ -124,6 +129,11 @@ const transformHyperscriptToJsx = (node, isTopLevelCall) => {
     isTopLevelCall
   ) {
     // If top level call just keep node as is
+    if (thirdArg) {
+      // This will recursively process all children nodes to get JSX/Expressions array
+      // Second parameter is for ugly hack :P
+      thirdArg.elements = transformChildrenArray(thirdArg, true);
+    }
     return node;
   } else if (isComputedClassNameOrComponent || isFirstArgIsCalledFunction) {
     // If nested in JSX wrap in expression container

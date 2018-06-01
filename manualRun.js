@@ -56,7 +56,7 @@ const ComputedRootWithObjectPropertyDeclaration = () =>
         ])
       ])
     },
-    // This children array will be ignored
+    // This first children in array will be ignored FOR THIS UGLY HACK IN INDEX
     [h(ANIMATIONS[country], { className: "lol" }), h("h1")]
   );
   
@@ -67,6 +67,14 @@ const ComplexComputedAttibutesHandling = () => h(Abc, { [kek]: 0, ["norm" + lol]
 
 // Handle multi classNames css modules (Rev only)
 h(".bar.fuzz.stuff", ["bar fuzz"])
+
+// Should process children but ignore computed parent
+h(\`calcualted \${stuff}\`, { amazing: "stuff" }, [
+  h("h1"),
+  h("h2"),
+  h("h3"),
+  h("div", [ h("div") ])
+])
 
 class Comp extends React.Component {
   render() {
@@ -97,7 +105,7 @@ class Comp extends React.Component {
 }`;
 
 const result = babel.transform(check, {
-  plugins: [["./src/index.js", { revolut: true }]]
+  plugins: [["./src/index.js"]]
 }).code;
 
 console.log(prettier.format(result, { semi: false, singleQuote: true }));

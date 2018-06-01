@@ -733,7 +733,7 @@ const ComputedRootWithObjectPropertyDeclaration = () =>
         ])
       ])
     },
-    // This children array will be ignored
+    // This first children in array will be ignored
     [h(ANIMATIONS[country], { className: \\"lol\\" }), h(\\"h1\\")]
   );
   
@@ -744,6 +744,14 @@ const ComplexComputedAttibutesHandling = () => h(Abc, { [kek]: 0, [\\"norm\\" + 
 
 // Handle multi classNames css modules (Rev only)
 h(\\".bar.fuzz.stuff\\", [\\"bar fuzz\\"])
+
+// Should process children but ignore computed parent
+h(\`calcualted \${stuff}\`, { amazing: \\"stuff\\" }, [
+  h(\\"h1\\"),
+  h(\\"h2\\"),
+  h(\\"h3\\"),
+  h(\\"div\\", [ h(\\"div\\") ])
+])
 
 class Comp extends React.Component {
   render() {
@@ -826,7 +834,7 @@ const ComputedRootWithObjectPropertyDeclaration = () =>
         </div>
       )
     },
-    // This children array will be ignored
+    // This first children in array will be ignored
     [h(ANIMATIONS[country], { className: 'lol' }), h('h1')]
   );
 
@@ -843,6 +851,14 @@ const ComplexComputedAttibutesHandling = () => (
 
 // Handle multi classNames css modules (Rev only)
 <div className={\`\${styles.bar} \${styles.fuzz} \${styles.stuff}\`}>bar fuzz</div>;
+
+// Should process children but ignore computed parent
+h(\`calcualted \${stuff}\`, { amazing: 'stuff' }, [
+  h('h1'),
+  h('h2'),
+  h('h3'),
+  h('div', [h('div')])
+]);
 
 class Comp extends React.Component {
   render() {
@@ -944,7 +960,7 @@ const ComputedRootWithObjectPropertyDeclaration = () =>
         ])
       ])
     },
-    // This children array will be ignored
+    // This first children in array will be ignored
     [h(ANIMATIONS[country], { className: \\"lol\\" }), h(\\"h1\\")]
   );
   
@@ -955,6 +971,14 @@ const ComplexComputedAttibutesHandling = () => h(Abc, { [kek]: 0, [\\"norm\\" + 
 
 // Handle multi classNames css modules (Rev only)
 h(\\".bar.fuzz.stuff\\", [\\"bar fuzz\\"])
+
+// Should process children but ignore computed parent
+h(\`calcualted \${stuff}\`, { amazing: \\"stuff\\" }, [
+  h(\\"h1\\"),
+  h(\\"h2\\"),
+  h(\\"h3\\"),
+  h(\\"div\\", [ h(\\"div\\") ])
+])
 
 class Comp extends React.Component {
   render() {
@@ -1037,8 +1061,8 @@ const ComputedRootWithObjectPropertyDeclaration = () =>
         </div>
       )
     },
-    // This children array will be ignored
-    [h(ANIMATIONS[country], { className: 'lol' }), h('h1')]
+    // This first children in array will be ignored
+    [h(ANIMATIONS[country], { className: 'lol' }), <h1 />]
   );
 
 const MultiMemberExpressionWithClosingTag = () => (
@@ -1054,6 +1078,16 @@ const ComplexComputedAttibutesHandling = () => (
 
 // Handle multi classNames css modules (Rev only)
 <div className=\\"bar fuzz stuff\\">bar fuzz</div>;
+
+// Should process children but ignore computed parent
+h(\`calcualted \${stuff}\`, { amazing: 'stuff' }, [
+  <h1 />,
+  <h2 />,
+  <h3 />,
+  <div>
+    <div />
+  </div>
+]);
 
 class Comp extends React.Component {
   render() {
