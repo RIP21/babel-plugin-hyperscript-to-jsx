@@ -192,6 +192,43 @@ class Comp extends React.Component {
   render() {
     return (
       <div className=\\"categories\\">
+        {categories.map(({ key, title, children, url: categoryURL }) => (
+          <div className=\\"category\\" key={key}>
+            {sectionsImages[key] &&
+              h(sectionsImages[key], { className: styles.animation })}
+            <Heading level={2} tag=\\"h2\\" spacing=\\"half\\">
+              {title}
+            </Heading>
+            <ul>
+              {children.map((item, index, arr) => {
+                const { url, title } = item;
+                if (index > 3) {
+                  return null;
+                }
+                if (index === 3 && arr.length > 4) {
+                  return (
+                    <li className=\\"viewMore\\" key={item.key}>
+                      <FormattedMessage {...messages.viewMore}>
+                        {message => (
+                          <HelpLink
+                            url={enhanceUrlEmbedded(categoryURL)}
+                            title={message}
+                            scrollToTop={true}
+                          />
+                        )}
+                      </FormattedMessage>
+                    </li>
+                  );
+                }
+                return (
+                  <li key={item.key}>
+                    <HelpLink url={enhanceUrlEmbedded(url)} title={title} />
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        ))}
         <div className=\\"helpFeatures\\">
           <div className=\\"feature\\">
             <Link href=\\"https://community.revolut.com\\">
@@ -310,11 +347,27 @@ const StatelessWithReturn = props => {
   return h(\\".class\\");
 };
 
-function named(props) {
+function HyperscriptAsRegularFunction(props) {
   return h(\\"h1\\");
 }
 
-const lol = h(\\"div.lol\\", {
+const HyperscriptAsVariable = h(\\"div.lol\\", {
+  someProp: \\"lol\\"
+});
+
+const HyperscriptWithExpressionAsChildren = h(
+  AnotherComponent,
+  { foo: \\"bar\\", bar: () => ({}), shouldRender: thing.length > 0 },
+  [arr.map(() => h('h1'))]
+)
+
+// Should be ignored from transforming
+const FirstArgTemplateLiteralWithComputedExpressions = h(\`div.lol\${stuff}\`, {
+  someProp: \\"lol\\"
+});
+
+// Not computed so should be fine
+const FirstArgTemplateLiteral = h(\`div.lol\`, {
   someProp: \\"lol\\"
 });
 
@@ -331,10 +384,12 @@ const ComputedRootWithObjectPropertyDeclaration = () =>
             size: \\"xs\\",
             code: currencyData.countryCode
           }),
+          // Computed not root should be wrapped in {}
           h(ANIMATIONS[country], { className: \\"lol\\" })
         ])
       ])
     },
+    // This children array will be ignored
     [h(ANIMATIONS[country], { className: \\"lol\\" }), h(\\"h1\\")]
   );
 
@@ -377,11 +432,25 @@ const StatelessWithReturn = props => {
   return <div className=\\"class\\" />;
 };
 
-function named(props) {
+function HyperscriptAsRegularFunction(props) {
   return <h1 />;
 }
 
-const lol = <div className=\\"lol\\" someProp=\\"lol\\" />;
+const HyperscriptAsVariable = <div className=\\"lol\\" someProp=\\"lol\\" />;
+
+const HyperscriptWithExpressionAsChildren = (
+  <AnotherComponent foo=\\"bar\\" bar={() => ({})} shouldRender={thing.length > 0}>
+    {arr.map(() => <h1 />)}
+  </AnotherComponent>
+);
+
+// Should be ignored from transforming
+const FirstArgTemplateLiteralWithComputedExpressions = h(\`div.lol\${stuff}\`, {
+  someProp: 'lol'
+});
+
+// Not computed so should be fine
+const FirstArgTemplateLiteral = <div className=\\"lol\\" someProp=\\"lol\\" />;
 
 const ComputedRootWithObjectPropertyDeclaration = () =>
   h(
@@ -393,11 +462,13 @@ const ComputedRootWithObjectPropertyDeclaration = () =>
           <div>{label}</div>
           <div className=\\"flag\\">
             <RoundFlag mix=\\"flag\\" size=\\"xs\\" code={currencyData.countryCode} />
-            {h(ANIMATIONS[country], { className: 'lol' })}
+            {// Computed not root should be wrapped in {}
+            h(ANIMATIONS[country], { className: 'lol' })}
           </div>
         </div>
       )
     },
+    // This children array will be ignored
     [h(ANIMATIONS[country], { className: 'lol' }), h('h1')]
   );
 

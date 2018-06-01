@@ -12,11 +12,27 @@ const StatelessWithReturn = props => {
   return h(".class");
 };
 
-function named(props) {
+function HyperscriptAsRegularFunction(props) {
   return h("h1");
 }
 
-const lol = h("div.lol", {
+const HyperscriptAsVariable = h("div.lol", {
+  someProp: "lol"
+});
+
+const HyperscriptWithExpressionAsChildren = h(
+  AnotherComponent,
+  { foo: "bar", bar: () => ({}), shouldRender: thing.length > 0 },
+  [arr.map(() => h('h1'))]
+)
+
+// Should be ignored from transforming
+const FirstArgTemplateLiteralWithComputedExpressions = h(\`div.lol\${stuff}\`, {
+  someProp: "lol"
+});
+
+// Not computed so should be fine
+const FirstArgTemplateLiteral = h(\`div.lol\`, {
   someProp: "lol"
 });
 
@@ -33,10 +49,12 @@ const ComputedRootWithObjectPropertyDeclaration = () =>
             size: "xs",
             code: currencyData.countryCode
           }),
+          // Computed not root should be wrapped in {}
           h(ANIMATIONS[country], { className: "lol" })
         ])
       ])
     },
+    // This children array will be ignored
     [h(ANIMATIONS[country], { className: "lol" }), h("h1")]
   );
 

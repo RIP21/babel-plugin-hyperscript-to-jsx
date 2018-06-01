@@ -7,6 +7,10 @@ const getOption = require("./utils").getOption;
 let isHyperscriptInScope = false;
 // utility functions that starts with b means build.
 
+const isHyperscriptCall = (node) => t.isIdentifier(node.callee, {
+  name: "h"
+});
+
 const bJsxAttr = (prop, expressionOrValue) => {
   const stringOrExpression = t.isStringLiteral(expressionOrValue)
     ? expressionOrValue
@@ -69,7 +73,7 @@ const injectChildren = (jsxElem, node) => {
 
 const transformChildrenArray = (jsxElem, node) => {
   return node.elements.map(element => {
-    if (t.isCallExpression(element)) {
+    if (isHyperscriptCall(element)) {
       return transformHyperscriptToJsx(element, false);
     }
     if (t.isStringLiteral(element)) {
@@ -83,21 +87,33 @@ const transformChildrenArray = (jsxElem, node) => {
 
 const transformHyperscriptToJsx = (node, isTopLevelCall) => {
   const [firstArg, secondArg, thirdArg] = node.arguments;
-  const isComputedClassNameOrCompnent = firstArg.computed;
+  // Handling few corner cases down here
 
-  if (isComputedClassNameOrCompnent && isTopLevelCall) {
+  // Handling of h(obj[field]) and h(`stuff ${computed}`) to ignore and convert to StringLiteral if possible
+  const isTemplateLiteral = t.isTemplateLiteral(firstArg)
+  const hasExpressions = isTemplateLiteral && firstArg.expressions.length
+  const isComputedClassNameOrComponent = firstArg.computed || hasExpressions;
+  // Intermediate value to convert to StringLiteral if TemplateLiteral has no expressions
+  let firstArgument
+  if (isTemplateLiteral && !hasExpressions) {
+    firstArgument = t.stringLiteral(firstArg.quasis[0].value.raw)
+  } else {
+    firstArgument = firstArg
+  }
+
+  if (isComputedClassNameOrComponent && isTopLevelCall) { // If top level call just keep node as is
     return node;
-  } else if (isComputedClassNameOrCompnent) {
+  } else if (isComputedClassNameOrComponent) { // If nested in JSX wrap in expression container
     return t.JSXExpressionContainer(node);
   }
 
   switch (node.arguments.length) {
     case 1:
-      return singleArgumentCase(firstArg);
+      return singleArgumentCase(firstArgument);
     case 2:
-      return twoArgumentsCase(firstArg, secondArg, true);
+      return twoArgumentsCase(firstArgument, secondArg, true);
     case 3:
-      return threeArgumentsCase(firstArg, secondArg, thirdArg);
+      return threeArgumentsCase(firstArgument, secondArg, thirdArg);
     default:
       break;
   }
@@ -196,9 +212,6 @@ module.exports = function() {
       CallExpression(path, state) {
         if (isHyperscriptInScope) {
           const { node } = path;
-          const isHyperscriptCall = t.isIdentifier(node.callee, {
-            name: "h"
-          });
           const isTopLevelCall =
             t.isReturnStatement(path.container) ||
             t.isConditionalExpression(path.container) ||
@@ -207,7 +220,7 @@ module.exports = function() {
             t.isObjectProperty(path.container) ||
             t.isVariableDeclarator(path.container) ||
             t.isExpressionStatement(path.container);
-          if (isHyperscriptCall && isTopLevelCall) {
+          if (isHyperscriptCall(node) && isTopLevelCall) {
             let result = node;
             const isRevolut = getOption(state, "revolut", false);
             result = isRevolut
