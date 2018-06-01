@@ -57,6 +57,8 @@ const ComputedRootWithObjectPropertyDeclaration = () =>
     // This children array will be ignored
     [h(ANIMATIONS[country], { className: "lol" }), h("h1")]
   );
+  
+const MultiMemberExpressionWithClosingTag = () => h(Pricing.lol.kek, { className }, [ h('h1') ])
 
 class Comp extends React.Component {
   render() {

@@ -7,9 +7,10 @@ const getOption = require("./utils").getOption;
 let isHyperscriptInScope = false;
 // utility functions that starts with b means build.
 
-const isHyperscriptCall = (node) => t.isIdentifier(node.callee, {
-  name: "h"
-});
+const isHyperscriptCall = node =>
+  t.isIdentifier(node.callee, {
+    name: "h"
+  });
 
 const bJsxAttr = (prop, expressionOrValue) => {
   const stringOrExpression = t.isStringLiteral(expressionOrValue)
@@ -30,11 +31,18 @@ const bJsxAttributes = objectExpression => {
 };
 
 const bJsxOpenElem = ({ name, selfClosing = false, attributes = [] }) =>
-  t.JSXOpeningElement(bJsxIdent(name), attributes, selfClosing);
+  t.JSXOpeningElement(
+    t.isJSXMemberExpression(name) ? name : bJsxIdent(name),
+    attributes,
+    selfClosing
+  );
 
 const bJsxIdent = name => t.JSXIdentifier(name);
 
-const bJsxCloseElem = name => t.JSXClosingElement(bJsxIdent(name));
+const bJsxCloseElem = name =>
+  t.isJSXMemberExpression(name)
+    ? t.JSXClosingElement(name)
+    : t.JSXClosingElement(bJsxIdent(name));
 
 // Builds self closed element
 const bJsxElem = ({
@@ -52,9 +60,12 @@ const bJsxElem = ({
 
 // Makes component wrap around his children, so closes it around strings/JSXElements/expressions.
 const closeComponent = (jsxElem, children) => {
+  const { name } = jsxElem.openingElement;
   jsxElem.selfClosing = false;
   jsxElem.openingElement.selfClosing = false;
-  jsxElem.closingElement = bJsxCloseElem(jsxElem.openingElement.name.name);
+  jsxElem.closingElement = bJsxCloseElem(
+    t.isJSXMemberExpression(name) ? name : name.name
+  );
   jsxElem.children = children;
   return jsxElem;
 };
@@ -90,20 +101,22 @@ const transformHyperscriptToJsx = (node, isTopLevelCall) => {
   // Handling few corner cases down here
 
   // Handling of h(obj[field]) and h(`stuff ${computed}`) to ignore and convert to StringLiteral if possible
-  const isTemplateLiteral = t.isTemplateLiteral(firstArg)
-  const hasExpressions = isTemplateLiteral && firstArg.expressions.length
+  const isTemplateLiteral = t.isTemplateLiteral(firstArg);
+  const hasExpressions = isTemplateLiteral && firstArg.expressions.length;
   const isComputedClassNameOrComponent = firstArg.computed || hasExpressions;
   // Intermediate value to convert to StringLiteral if TemplateLiteral has no expressions
-  let firstArgument
+  let firstArgument;
   if (isTemplateLiteral && !hasExpressions) {
-    firstArgument = t.stringLiteral(firstArg.quasis[0].value.raw)
+    firstArgument = t.stringLiteral(firstArg.quasis[0].value.raw);
   } else {
-    firstArgument = firstArg
+    firstArgument = firstArg;
   }
 
-  if (isComputedClassNameOrComponent && isTopLevelCall) { // If top level call just keep node as is
+  if (isComputedClassNameOrComponent && isTopLevelCall) {
+    // If top level call just keep node as is
     return node;
-  } else if (isComputedClassNameOrComponent) { // If nested in JSX wrap in expression container
+  } else if (isComputedClassNameOrComponent) {
+    // If nested in JSX wrap in expression container
     return t.JSXExpressionContainer(node);
   }
 
@@ -119,10 +132,18 @@ const transformHyperscriptToJsx = (node, isTopLevelCall) => {
   }
 };
 
+const memberExpressionToJsx = memberExpression => {
+  const object = t.isMemberExpression(memberExpression.object)
+    ? memberExpressionToJsx(memberExpression.object)
+    : bJsxIdent(memberExpression.object.name);
+  const property = bJsxIdent(memberExpression.property.name);
+  return t.jSXMemberExpression(object, property);
+};
+
 const singleArgumentCase = firstArgument => {
   const isElement = t.isStringLiteral(firstArgument);
   const isReactComponent = t.isIdentifier(firstArgument);
-  let tagOrComponent = "";
+  const isMemberExpression = t.isMemberExpression(firstArgument);
   let attributes = [];
   if (isElement) {
     const { id, className, tag } = getTagAndClassNamesAndId(
@@ -138,11 +159,13 @@ const singleArgumentCase = firstArgument => {
       name: tag,
       attributes
     });
-  } else if (isReactComponent) {
-    tagOrComponent = firstArgument.name;
+  } else if (isReactComponent || isMemberExpression) {
+    const componentName = isMemberExpression
+      ? memberExpressionToJsx(firstArgument)
+      : firstArgument.name;
     return bJsxElem({
       selfClosing: true,
-      name: tagOrComponent
+      name: componentName
     });
   }
 };
@@ -182,6 +205,7 @@ module.exports = function() {
       parserOpts.plugins.push("functionSent");
       parserOpts.plugins.push("jsx");
       parserOpts.plugins.push("objectRestSpread");
+      parserOpts.plugins.push("exportDefaultFrom");
     },
     visitor: {
       Program(path) {
