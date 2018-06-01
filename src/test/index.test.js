@@ -1,92 +1,9 @@
 "use strict";
 
+const check = require("../../manualRun.js").check;
 const pluginTester = require("babel-plugin-tester");
 const hyperToJsxTransform = require("../index.js");
 const prettier = require("prettier");
-
-const code = `import h from "react-hyperscript";
-
-const StatelessComponent = props => h("h1");
-
-const StatelessWithReturn = props => {
-  return h(".class");
-};
-
-function HyperscriptAsRegularFunction(props) {
-  return h("h1");
-}
-
-const HyperscriptAsVariable = h("div.lol", {
-  someProp: "lol"
-});
-
-const HyperscriptWithExpressionAsChildren = h(
-  AnotherComponent,
-  { foo: "bar", bar: () => ({}), shouldRender: thing.length > 0 },
-  [arr.map(() => h('h1'))]
-)
-
-// Should be ignored from transforming
-const FirstArgTemplateLiteralWithComputedExpressions = h(\`div.lol\${stuff}\`, {
-  someProp: "lol"
-});
-
-// Not computed so should be fine
-const FirstArgTemplateLiteral = h(\`div.lol\`, {
-  someProp: "lol"
-});
-
-const ComputedRootWithObjectPropertyDeclaration = () =>
-  h(
-    ANIMATIONS[country],
-    {
-      className: "lol",
-      content: h(".selectItem", [
-        h("div", label),
-        h(".flag", [
-          h(RoundFlag, {
-            mix: "flag",
-            size: "xs",
-            code: currencyData.countryCode
-          }),
-          // Computed not root should be wrapped in {}
-          h(ANIMATIONS[country], { className: "lol" })
-        ])
-      ])
-    },
-    // This children array will be ignored
-    [h(ANIMATIONS[country], { className: "lol" }), h("h1")]
-  );
-  
-const MultiMemberExpressionWithClosingTag = () => h(Pricing.lol.kek, { className }, [ h('h1') ])
-
-class Comp extends React.Component {
-  render() {
-    return h("div.example", [
-      isStuff && h("h1#heading", { ...getProps, ...getKnobs(), stuff: "" }),
-      isStuff
-        ? h("h1#heading", { ...getProps, ...getKnobs(), stuff: "" })
-        : h("h1#heading", "heading"),
-      h("h1#heading", { ...getProps, ...getKnobs(), stuff: "" }),
-      h("h1#heading", getChildren),
-      h(ANIMATIONS[country], {
-        className: "lol"
-      }),
-      h("h1#heading", getChildren(), [h("div")]),
-      h("div", [h("div", "Some content")]),
-      h("h1#heading", "This is hyperscript"),
-      h("h2", "creating React.js markup"),
-      h(
-        AnotherComponent,
-        { foo: "bar", bar: () => ({}), shouldRender: thing.length > 0 },
-        [
-          h("li", [h("a", { href: "http://whatever.com" }, "One list item")]),
-          h("li", "Another list item")
-        ]
-      )
-    ]);
-  }
-}`;
 
 const complexExample = `import h from "react-hyperscript";
 
@@ -249,9 +166,11 @@ pluginTester({
     prettier.format(output, { semi: true, singleQuote: true }),
   tests: [
     {
-      title: 'Fake all cases',
-      code
+      title: "Fake all cases",
+      code: check
     },
-    { title: 'Complex real', code: complexExample }
+    { title: "Complex real", code: complexExample },
+    { title: "Fake all case revolut", code: check, pluginOptions: { revolut: true } },
+    { title: "Complex real revo", code: complexExample, pluginOptions: { revolut: true }  },
   ]
 });

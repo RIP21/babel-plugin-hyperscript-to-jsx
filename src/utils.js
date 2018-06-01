@@ -16,7 +16,7 @@ const getTagAndClassNamesAndId = string => {
     if (dotIndex !== -1 && hashIndex !== -1) {
       index = dotIndex > hashIndex ? hashIndex : dotIndex;
     }
-    const tag = index !== 0 ? string.substr(0, index) : 'div';
+    const tag = index !== 0 ? string.substr(0, index) : "div";
     const classesAndIds = extractClassNamesAndId(string);
 
     const className = classesAndIds

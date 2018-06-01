@@ -13,10 +13,13 @@ const isHyperscriptCall = node =>
   });
 
 const bJsxAttr = (prop, expressionOrValue) => {
+  const attributeName = t.isStringLiteral(prop)
+    ? prop.extra.rawValue
+    : prop.name;
   const stringOrExpression = t.isStringLiteral(expressionOrValue)
     ? expressionOrValue
     : t.JSXExpressionContainer(expressionOrValue);
-  return t.JSXAttribute(bJsxIdent(prop.name), stringOrExpression);
+  return t.JSXAttribute(bJsxIdent(attributeName), stringOrExpression);
 };
 
 const bJsxAttributes = objectExpression => {
@@ -24,6 +27,9 @@ const bJsxAttributes = objectExpression => {
     const { key, value, argument } = node;
     if (t.isSpreadProperty(node) || t.isSpreadElement(node)) {
       return t.JSXSpreadAttribute(argument);
+    } else if (t.isProperty(node) && node.computed && !t.isStringLiteral(key)) {
+      // to handle h(Abc, { [kek]: 0, ["norm"]: 1 }) to <Abc {...{ [kek]: 0 }} norm={1} />
+      return t.JSXSpreadAttribute(t.objectExpression([node]));
     } else {
       return bJsxAttr(key, value);
     }
@@ -111,11 +117,15 @@ const transformHyperscriptToJsx = (node, isTopLevelCall) => {
   } else {
     firstArgument = firstArg;
   }
-
-  if (isComputedClassNameOrComponent && isTopLevelCall) {
+  const isFirstArgIsCalledFunction =
+    firstArg.arguments && firstArg.arguments.length >= 0;
+  if (
+    (isComputedClassNameOrComponent || isFirstArgIsCalledFunction) &&
+    isTopLevelCall
+  ) {
     // If top level call just keep node as is
     return node;
-  } else if (isComputedClassNameOrComponent) {
+  } else if (isComputedClassNameOrComponent || isFirstArgIsCalledFunction) {
     // If nested in JSX wrap in expression container
     return t.JSXExpressionContainer(node);
   }
@@ -192,6 +202,7 @@ const threeArgumentsCase = (firstArg, secondArg, thirdArg) => {
   return injectChildren(jsxElem, thirdArg);
 };
 
+let isCssModules = false;
 module.exports = function() {
   return {
     manipulateOptions(opts, parserOpts) {
@@ -206,6 +217,7 @@ module.exports = function() {
       parserOpts.plugins.push("jsx");
       parserOpts.plugins.push("objectRestSpread");
       parserOpts.plugins.push("exportDefaultFrom");
+      parserOpts.plugins.push("exportNamespaceFrom");
     },
     visitor: {
       Program(path) {
@@ -220,6 +232,22 @@ module.exports = function() {
           if (t.isImportDeclaration(arg)) {
             return (
               arg.specifiers.find(specifier => specifier.local.name === "h") ||
+              false
+            );
+          }
+        });
+        // This is Revolut specific logic ignore it :)
+        isCssModules = path.node.body.find(arg => {
+          if (t.isVariableDeclaration(arg)) {
+            return (
+              arg.declarations.find(
+                declaration => declaration.id.name === "hx"
+              ) || false
+            );
+          }
+          if (t.isImportDeclaration(arg)) {
+            return (
+              arg.specifiers.find(specifier => specifier.local.name === "hx") ||
               false
             );
           }
@@ -248,7 +276,7 @@ module.exports = function() {
             let result = node;
             const isRevolut = getOption(state, "revolut", false);
             result = isRevolut
-              ? revTransform(node, isTopLevelCall)
+              ? revTransform(node, isTopLevelCall, !!isCssModules)
               : transformHyperscriptToJsx(node, isTopLevelCall);
             path.replaceWith(result);
           }
