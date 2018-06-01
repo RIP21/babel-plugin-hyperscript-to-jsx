@@ -70,7 +70,7 @@ const injectChildren = (jsxElem, node) => {
 const transformChildrenArray = (jsxElem, node) => {
   return node.elements.map(element => {
     if (t.isCallExpression(element)) {
-      return transformHyperscriptToJsx(element);
+      return transformHyperscriptToJsx(element, false);
     }
     if (t.isStringLiteral(element)) {
       return t.JSXText(element.value);
@@ -81,8 +81,16 @@ const transformChildrenArray = (jsxElem, node) => {
   });
 };
 
-const transformHyperscriptToJsx = node => {
+const transformHyperscriptToJsx = (node, isTopLevelCall) => {
   const [firstArg, secondArg, thirdArg] = node.arguments;
+  const isComputedClassNameOrCompnent = firstArg.computed;
+
+  if (isComputedClassNameOrCompnent && isTopLevelCall) {
+    return node;
+  } else if (isComputedClassNameOrCompnent) {
+    return t.JSXExpressionContainer(node);
+  }
+
   switch (node.arguments.length) {
     case 1:
       return singleArgumentCase(firstArg);
@@ -193,13 +201,18 @@ module.exports = function() {
           });
           const isTopLevelCall =
             t.isReturnStatement(path.container) ||
-            t.isArrowFunctionExpression(path.container);
+            t.isConditionalExpression(path.container) ||
+            t.isArrowFunctionExpression(path.container) ||
+            t.isLogicalExpression(path.container) ||
+            t.isObjectProperty(path.container) ||
+            t.isVariableDeclarator(path.container) ||
+            t.isExpressionStatement(path.container);
           if (isHyperscriptCall && isTopLevelCall) {
             let result = node;
             const isRevolut = getOption(state, "revolut", false);
             result = isRevolut
-              ? revTransform(node, state)
-              : transformHyperscriptToJsx(node);
+              ? revTransform(node, isTopLevelCall)
+              : transformHyperscriptToJsx(node, isTopLevelCall);
             path.replaceWith(result);
           }
         }
