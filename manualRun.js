@@ -60,6 +60,8 @@ const ComputedRootWithObjectPropertyDeclaration = () =>
     [h(ANIMATIONS[country], { className: "lol" }), h("h1"), kek && mem, surreal ? lol : kek, t.tabName, lol, <div/>]
   );
   
+h('div' + 'div')
+
 const ThirdArgOnIgnoredIsNotArray = () =>
   h(
     ANIMATIONS[country],

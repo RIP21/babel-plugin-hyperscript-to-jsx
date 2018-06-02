@@ -130,7 +130,8 @@ const transformHyperscriptToJsx = (node, isTopLevelCall) => {
   // Handling of h(obj[field]) and h(`stuff ${computed}`) to ignore and convert to StringLiteral if possible
   const isTemplateLiteral = t.isTemplateLiteral(firstArg);
   const hasExpressions = isTemplateLiteral && firstArg.expressions.length;
-  const isComputedClassNameOrComponent = firstArg.computed || hasExpressions;
+  const isComputedClassNameOrComponent =
+    firstArg.computed || hasExpressions || t.isBinaryExpression(firstArg);
   // Intermediate value to convert to StringLiteral if TemplateLiteral has no expressions
   let firstArgument;
   if (isTemplateLiteral && !hasExpressions) {
@@ -275,8 +276,9 @@ module.exports = function() {
           }
           if (t.isImportDeclaration(arg)) {
             return (
-              arg.specifiers.find(specifier => specifier.local.name === "React") ||
-              false
+              arg.specifiers.find(
+                specifier => specifier.local.name === "React"
+              ) || false
             );
           }
         });
