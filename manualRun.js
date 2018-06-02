@@ -57,8 +57,21 @@ const ComputedRootWithObjectPropertyDeclaration = () =>
       ])
     },
     // This first children in array will be ignored FOR THIS UGLY HACK IN INDEX
-    [h(ANIMATIONS[country], { className: "lol" }), h("h1")]
+    [h(ANIMATIONS[country], { className: "lol" }), h("h1"), kek && mem, surreal ? lol : kek, t.tabName, lol, <div/>]
   );
+  
+const ThirdArgOnIgnoredIsNotArray = () =>
+  h(
+    ANIMATIONS[country],
+    {
+      className: "lol",
+    },
+    // This first children in array will be ignored FOR THIS UGLY HACK IN INDEX
+    children
+  );
+  
+const SecondArgOnIgnoredIsNotArray = () =>
+  h(ANIMATIONS[country], children);
   
 const MultiMemberExpressionWithClosingTag = () => h(Pricing.lol.kek, { className }, [ h('h1') ])
 

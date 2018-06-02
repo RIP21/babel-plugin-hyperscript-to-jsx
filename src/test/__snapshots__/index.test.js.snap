@@ -733,9 +733,22 @@ const ComputedRootWithObjectPropertyDeclaration = () =>
         ])
       ])
     },
-    // This first children in array will be ignored
-    [h(ANIMATIONS[country], { className: \\"lol\\" }), h(\\"h1\\")]
+    // This first children in array will be ignored FOR THIS UGLY HACK IN INDEX
+    [h(ANIMATIONS[country], { className: \\"lol\\" }), h(\\"h1\\"), kek && mem, surreal ? lol : kek, t.tabName, lol, <div/>]
   );
+  
+const ThirdArgOnIgnoredIsNotArray = () =>
+  h(
+    ANIMATIONS[country],
+    {
+      className: \\"lol\\",
+    },
+    // This first children in array will be ignored FOR THIS UGLY HACK IN INDEX
+    children
+  );
+  
+const SecondArgOnIgnoredIsNotArray = () =>
+  h(ANIMATIONS[country], children);
   
 const MultiMemberExpressionWithClosingTag = () => h(Pricing.lol.kek, { className }, [ h('h1') ])
 
@@ -834,9 +847,29 @@ const ComputedRootWithObjectPropertyDeclaration = () =>
         </div>
       )
     },
-    // This first children in array will be ignored
-    [h(ANIMATIONS[country], { className: 'lol' }), h('h1')]
+    // This first children in array will be ignored FOR THIS UGLY HACK IN INDEX
+    [
+      h(ANIMATIONS[country], { className: 'lol' }),
+      <h1 />,
+      kek && mem,
+      surreal ? lol : kek,
+      t.tabName,
+      lol,
+      <div />
+    ]
   );
+
+const ThirdArgOnIgnoredIsNotArray = () =>
+  h(
+    ANIMATIONS[country],
+    {
+      className: 'lol'
+    },
+    // This first children in array will be ignored FOR THIS UGLY HACK IN INDEX
+    children
+  );
+
+const SecondArgOnIgnoredIsNotArray = () => h(ANIMATIONS[country], children);
 
 const MultiMemberExpressionWithClosingTag = () => (
   <Pricing.lol.kek className={className}>
@@ -854,10 +887,12 @@ const ComplexComputedAttibutesHandling = () => (
 
 // Should process children but ignore computed parent
 h(\`calcualted \${stuff}\`, { amazing: 'stuff' }, [
-  h('h1'),
-  h('h2'),
-  h('h3'),
-  h('div', [h('div')])
+  <h1 />,
+  <h2 />,
+  <h3 />,
+  <div>
+    <div />
+  </div>
 ]);
 
 class Comp extends React.Component {
@@ -960,9 +995,22 @@ const ComputedRootWithObjectPropertyDeclaration = () =>
         ])
       ])
     },
-    // This first children in array will be ignored
-    [h(ANIMATIONS[country], { className: \\"lol\\" }), h(\\"h1\\")]
+    // This first children in array will be ignored FOR THIS UGLY HACK IN INDEX
+    [h(ANIMATIONS[country], { className: \\"lol\\" }), h(\\"h1\\"), kek && mem, surreal ? lol : kek, t.tabName, lol, <div/>]
   );
+  
+const ThirdArgOnIgnoredIsNotArray = () =>
+  h(
+    ANIMATIONS[country],
+    {
+      className: \\"lol\\",
+    },
+    // This first children in array will be ignored FOR THIS UGLY HACK IN INDEX
+    children
+  );
+  
+const SecondArgOnIgnoredIsNotArray = () =>
+  h(ANIMATIONS[country], children);
   
 const MultiMemberExpressionWithClosingTag = () => h(Pricing.lol.kek, { className }, [ h('h1') ])
 
@@ -1061,9 +1109,29 @@ const ComputedRootWithObjectPropertyDeclaration = () =>
         </div>
       )
     },
-    // This first children in array will be ignored
-    [h(ANIMATIONS[country], { className: 'lol' }), <h1 />]
+    // This first children in array will be ignored FOR THIS UGLY HACK IN INDEX
+    [
+      h(ANIMATIONS[country], { className: 'lol' }),
+      <h1 />,
+      kek && mem,
+      surreal ? lol : kek,
+      t.tabName,
+      lol,
+      <div />
+    ]
   );
+
+const ThirdArgOnIgnoredIsNotArray = () =>
+  h(
+    ANIMATIONS[country],
+    {
+      className: 'lol'
+    },
+    // This first children in array will be ignored FOR THIS UGLY HACK IN INDEX
+    children
+  );
+
+const SecondArgOnIgnoredIsNotArray = () => h(ANIMATIONS[country], children);
 
 const MultiMemberExpressionWithClosingTag = () => (
   <Pricing.lol.kek className={className}>

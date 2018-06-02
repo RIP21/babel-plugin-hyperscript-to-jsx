@@ -78,7 +78,7 @@ const closeComponent = (jsxElem, children) => {
 const injectChildren = (jsxElem, node) => {
   let result;
   if (t.isArrayExpression(node)) {
-    result = transformChildrenArray(jsxElem, node);
+    result = transformChildrenArray(node);
   }
   if (t.isStringLiteral(node)) {
     result = [t.JSXText(node.value)];
@@ -94,8 +94,28 @@ const injectChildren = (jsxElem, node) => {
   }
 };
 
-const transformChildrenArray = (jsxElem, node) => {
+const transformChildrenArray = (node, noExpressionContainers) => {
   return node.elements.map(element => {
+    // Ugliest hack I ever wrote, but this is to avoid putting computed hyperscript calls into the JSXExpressionContainer for ignored computed root h calls
+    if (
+      ((t.isJSXElement(element) ||
+        t.isLogicalExpression(element) ||
+        t.isConditionalExpression(element) ||
+        t.isMemberExpression(element) ||
+        t.isIdentifier(element)) &&
+        noExpressionContainers) ||
+      (isHyperscriptCall(element) &&
+        noExpressionContainers &&
+        element.arguments &&
+        element.arguments[0] &&
+        (element.arguments[0].computed ||
+          (t.isTemplateLiteral(element.arguments[0]) &&
+            element.arguments[0].expressions.length > 0) ||
+          (element.arguments[0].arguments &&
+            element.arguments[0].arguments.length >= 0)))
+    ) {
+      return element;
+    }
     if (isHyperscriptCall(element)) {
       return transformHyperscriptToJsx(element, false);
     }
@@ -130,6 +150,14 @@ const transformHyperscriptToJsx = (node, isTopLevelCall) => {
     isTopLevelCall
   ) {
     // If top level call just keep node as is
+    if (t.isArrayExpression(secondArg) && !thirdArg) {
+      secondArg.elements = transformChildrenArray(secondArg, true);
+    }
+    if (t.isArrayExpression(thirdArg)) {
+      // This will recursively process all children nodes to get JSX/Expressions array
+      // Second parameter is for ugly hack :P
+      thirdArg.elements = transformChildrenArray(thirdArg, true);
+    }
     return node;
   } else if (isComputedClassNameOrComponent || isFirstArgIsCalledFunction) {
     // If nested in JSX wrap in expression container
