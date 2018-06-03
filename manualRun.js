@@ -11,6 +11,10 @@ const StatelessWithReturn = props => {
   return h(".class");
 };
 
+const ClassNameWithDashesSingle = props => h('.this-is-dashes')
+const ClassNameWithDashesMulti = props => h('.this-is-dashes.dash-afterDash')
+
+
 function HyperscriptAsRegularFunction(props) {
   return h("h1");
 }
@@ -120,7 +124,7 @@ class Comp extends React.Component {
 }`;
 
 const result = babel.transform(check, {
-  plugins: [["./src/index.js"]]
+  plugins: [["./src/index.js", { revolut: true }]]
 }).code;
 
 console.log(prettier.format(result, { semi: false, singleQuote: true }));

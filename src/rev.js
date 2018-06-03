@@ -188,9 +188,14 @@ const memberExpressionToJsx = memberExpression => {
 const processClassName = className => {
   const classNames = className.split(" ");
   if (classNames.length > 1) {
-    const expressions = classNames.map(clazz =>
-      t.MemberExpression(t.identifier("styles"), t.identifier(clazz))
-    );
+    const expressions = classNames.map(clazz => {
+      const isComputed = clazz.includes("-");
+      return t.MemberExpression(
+        t.identifier("styles"),
+        isComputed ? t.stringLiteral(clazz) : t.identifier(clazz),
+        isComputed
+      );
+    });
     const quasis = classNames.map(() =>
       t.templateElement({ cooked: " ", raw: " " })
     ); // Spaces between
@@ -199,8 +204,13 @@ const processClassName = className => {
     quasis.unshift(t.templateElement({ cooked: "", raw: "" })); // Empty string before
     return t.templateLiteral(quasis, expressions);
   } else {
+    const isComputed = className.includes("-");
     return isCssModules
-      ? t.MemberExpression(t.identifier("styles"), t.identifier(className))
+      ? t.MemberExpression(
+          t.identifier("styles"),
+          isComputed ? t.stringLiteral(className) : t.identifier(className),
+          isComputed
+        )
       : t.StringLiteral(className);
   }
 };

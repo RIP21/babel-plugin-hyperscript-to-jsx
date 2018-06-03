@@ -688,6 +688,10 @@ const StatelessWithReturn = props => {
   return h(\\".class\\");
 };
 
+const ClassNameWithDashesSingle = props => h('.this-is-dashes')
+const ClassNameWithDashesMulti = props => h('.this-is-dashes.dash-afterDash')
+
+
 function HyperscriptAsRegularFunction(props) {
   return h(\\"h1\\");
 }
@@ -808,6 +812,13 @@ const StatelessComponent = props => <h1 />;
 const StatelessWithReturn = props => {
   return <div className={styles.class} />;
 };
+
+const ClassNameWithDashesSingle = props => (
+  <div className={styles['this-is-dashes']} />
+);
+const ClassNameWithDashesMulti = props => (
+  <div className={\`\${styles['this-is-dashes']} \${styles['dash-afterDash']}\`} />
+);
 
 function HyperscriptAsRegularFunction(props) {
   return <h1 />;
@@ -954,6 +965,10 @@ const StatelessWithReturn = props => {
   return h(\\".class\\");
 };
 
+const ClassNameWithDashesSingle = props => h('.this-is-dashes')
+const ClassNameWithDashesMulti = props => h('.this-is-dashes.dash-afterDash')
+
+
 function HyperscriptAsRegularFunction(props) {
   return h(\\"h1\\");
 }
@@ -1074,6 +1089,11 @@ const StatelessComponent = props => <h1 />;
 const StatelessWithReturn = props => {
   return <div className=\\"class\\" />;
 };
+
+const ClassNameWithDashesSingle = props => <div className=\\"this-is-dashes\\" />;
+const ClassNameWithDashesMulti = props => (
+  <div className=\\"this-is-dashes dash-afterDash\\" />
+);
 
 function HyperscriptAsRegularFunction(props) {
   return <h1 />;
