@@ -13,7 +13,7 @@ const StatelessWithReturn = props => {
 
 const ClassNameWithDashesSingle = props => h('.this-is-dashes')
 const ClassNameWithDashesMulti = props => h('.this-is-dashes.dash-afterDash')
-
+const JustPropField = h(Stuff, { children: h(FormattedMessage, { ...commonMessages.learnMore }) })
 
 function HyperscriptAsRegularFunction(props) {
   return h("h1");

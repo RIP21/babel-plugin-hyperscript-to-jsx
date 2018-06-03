@@ -317,7 +317,8 @@ module.exports = function() {
             t.isLogicalExpression(path.container) ||
             t.isObjectProperty(path.container) ||
             t.isVariableDeclarator(path.container) ||
-            t.isExpressionStatement(path.container);
+            t.isExpressionStatement(path.container) ||
+            t.isJSXExpressionContainer(path.container)
           if (isHyperscriptCall(node) && isTopLevelCall) {
             let result = node;
             const isRevolut = getOption(state, "revolut", false);

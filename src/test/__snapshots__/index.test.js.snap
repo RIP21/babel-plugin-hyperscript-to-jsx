@@ -690,7 +690,7 @@ const StatelessWithReturn = props => {
 
 const ClassNameWithDashesSingle = props => h('.this-is-dashes')
 const ClassNameWithDashesMulti = props => h('.this-is-dashes.dash-afterDash')
-
+const JustPropField = h(Stuff, { children: h(FormattedMessage, { ...commonMessages.learnMore }) })
 
 function HyperscriptAsRegularFunction(props) {
   return h(\\"h1\\");
@@ -818,6 +818,9 @@ const ClassNameWithDashesSingle = props => (
 );
 const ClassNameWithDashesMulti = props => (
   <div className={\`\${styles['this-is-dashes']} \${styles['dash-afterDash']}\`} />
+);
+const JustPropField = (
+  <Stuff children={<FormattedMessage {...commonMessages.learnMore} />} />
 );
 
 function HyperscriptAsRegularFunction(props) {
@@ -967,7 +970,7 @@ const StatelessWithReturn = props => {
 
 const ClassNameWithDashesSingle = props => h('.this-is-dashes')
 const ClassNameWithDashesMulti = props => h('.this-is-dashes.dash-afterDash')
-
+const JustPropField = h(Stuff, { children: h(FormattedMessage, { ...commonMessages.learnMore }) })
 
 function HyperscriptAsRegularFunction(props) {
   return h(\\"h1\\");
@@ -1093,6 +1096,9 @@ const StatelessWithReturn = props => {
 const ClassNameWithDashesSingle = props => <div className=\\"this-is-dashes\\" />;
 const ClassNameWithDashesMulti = props => (
   <div className=\\"this-is-dashes dash-afterDash\\" />
+);
+const JustPropField = (
+  <Stuff children={<FormattedMessage {...commonMessages.learnMore} />} />
 );
 
 function HyperscriptAsRegularFunction(props) {
