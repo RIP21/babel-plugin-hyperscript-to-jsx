@@ -11,6 +11,12 @@ const StatelessWithReturn = props => {
   return h(".class");
 };
 
+const HandlesAssignment = ({ title }) => {
+  title = h('span')
+}
+
+handleArrays = [h(Sidebar, { categories }), h(CategoryQuestions, { ...question, isBusiness })]
+
 const ClassNameWithDashesSingle = props => h('.this-is-dashes')
 const ClassNameWithDashesMulti = props => h('.this-is-dashes.dash-afterDash')
 const JustPropField = h(Stuff, { children: h(FormattedMessage, { ...commonMessages.learnMore }) })
@@ -121,7 +127,8 @@ class Comp extends React.Component {
       )
     ]);
   }
-}`;
+}
+`;
 
 const result = babel.transform(check, {
   plugins: [["./src/index.js", { revolut: true }]]

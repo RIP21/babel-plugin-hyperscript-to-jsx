@@ -688,6 +688,12 @@ const StatelessWithReturn = props => {
   return h(\\".class\\");
 };
 
+const HandlesAssignment = ({ title }) => {
+  title = h('span')
+}
+
+handleArrays = [h(Sidebar, { categories }), h(CategoryQuestions, { ...question, isBusiness })]
+
 const ClassNameWithDashesSingle = props => h('.this-is-dashes')
 const ClassNameWithDashesMulti = props => h('.this-is-dashes.dash-afterDash')
 const JustPropField = h(Stuff, { children: h(FormattedMessage, { ...commonMessages.learnMore }) })
@@ -812,6 +818,15 @@ const StatelessComponent = props => <h1 />;
 const StatelessWithReturn = props => {
   return <div className={styles.class} />;
 };
+
+const HandlesAssignment = ({ title }) => {
+  title = <span />;
+};
+
+handleArrays = [
+  <Sidebar categories={categories} />,
+  <CategoryQuestions {...question} isBusiness={isBusiness} />
+];
 
 const ClassNameWithDashesSingle = props => (
   <div className={styles['this-is-dashes']} />
@@ -968,6 +983,12 @@ const StatelessWithReturn = props => {
   return h(\\".class\\");
 };
 
+const HandlesAssignment = ({ title }) => {
+  title = h('span')
+}
+
+handleArrays = [h(Sidebar, { categories }), h(CategoryQuestions, { ...question, isBusiness })]
+
 const ClassNameWithDashesSingle = props => h('.this-is-dashes')
 const ClassNameWithDashesMulti = props => h('.this-is-dashes.dash-afterDash')
 const JustPropField = h(Stuff, { children: h(FormattedMessage, { ...commonMessages.learnMore }) })
@@ -1092,6 +1113,15 @@ const StatelessComponent = props => <h1 />;
 const StatelessWithReturn = props => {
   return <div className=\\"class\\" />;
 };
+
+const HandlesAssignment = ({ title }) => {
+  title = <span />;
+};
+
+handleArrays = [
+  <Sidebar categories={categories} />,
+  <CategoryQuestions {...question} isBusiness={isBusiness} />
+];
 
 const ClassNameWithDashesSingle = props => <div className=\\"this-is-dashes\\" />;
 const ClassNameWithDashesMulti = props => (
