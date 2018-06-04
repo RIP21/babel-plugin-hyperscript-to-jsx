@@ -266,22 +266,39 @@ module.exports = function() {
             );
           }
         });
-        const isReactIsInScope = path.node.body.find(arg => {
-          if (t.isVariableDeclaration(arg)) {
-            return (
-              arg.declarations.find(
-                declaration => declaration.id.name === "Reat"
-              ) || false
-            );
-          }
+        let isReactDefaultImportInScope = false;
+        let reactImport = false;
+        let isReactImportIsInScope = false;
+        path.node.body.some(arg => {
           if (t.isImportDeclaration(arg)) {
-            return (
-              arg.specifiers.find(
-                specifier => specifier.local.name === "React"
-              ) || false
+            isReactImportIsInScope = arg.source.value === "react";
+            reactImport = isReactImportIsInScope ? arg : false;
+            isReactDefaultImportInScope = arg.specifiers.some(
+              it =>
+                t.isImportDefaultSpecifier(it) &&
+                it.local.name === "React" &&
+                isReactImportIsInScope
             );
+            return isReactImportIsInScope;
           }
+          return false;
         });
+        if (
+          isReactImportIsInScope &&
+          !isReactDefaultImportInScope &&
+          isHyperscriptInScope
+        ) {
+          reactImport.specifiers.unshift(
+            t.importDefaultSpecifier(t.identifier("React"))
+          );
+        } else if (!isReactImportIsInScope && isHyperscriptInScope) {
+          path.node.body.unshift(
+            t.ImportDeclaration(
+              [t.ImportDefaultSpecifier(t.Identifier("React"))],
+              t.StringLiteral("react")
+            )
+          );
+        }
         // This is Revolut specific logic ignore it :)
         isCssModules = path.node.body.find(arg => {
           if (t.isVariableDeclaration(arg)) {
@@ -298,14 +315,6 @@ module.exports = function() {
             );
           }
         });
-        if (isHyperscriptInScope && !isReactIsInScope) {
-          path.node.body.unshift(
-            t.ImportDeclaration(
-              [t.ImportDefaultSpecifier(t.Identifier("React"))],
-              t.StringLiteral("react")
-            )
-          );
-        }
       },
       CallExpression(path, state) {
         if (isHyperscriptInScope) {
@@ -320,7 +329,7 @@ module.exports = function() {
             t.isExpressionStatement(path.container) ||
             t.isJSXExpressionContainer(path.container) ||
             t.isAssignmentExpression(path.container) ||
-            t.isArrayExpression(path.parent)
+            t.isArrayExpression(path.parent);
           if (isHyperscriptCall(node) && isTopLevelCall) {
             let result = node;
             const isRevolut = getOption(state, "revolut", false);

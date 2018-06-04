@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-hyperscript-to-jsx",
-  "version": "1.0.24",
+  "version": "1.0.25",
   "description": "This plugin transforms react-hyperscript into JSX",
   "repository": "https://github.com/RIP21/babel-plugin-hyperscript-to-jsx",
   "license": "MIT",

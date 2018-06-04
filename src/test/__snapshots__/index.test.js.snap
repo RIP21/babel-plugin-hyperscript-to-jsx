@@ -1,6 +1,486 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`hyperscript-to-jsx Complex real revo: Complex real revo 1`] = `
+exports[`hyperscript-to-jsx 1. hyperscript-to-jsx: 1. hyperscript-to-jsx 1`] = `
+"
+import h from 'h';
+import hx from 'hx';
+   const StatelessComponent = props => h(\\"h1\\");
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import React from 'react';
+import h from 'h';
+import hx from 'hx';
+const StatelessComponent = props => <h1 />;
+
+"
+`;
+
+exports[`hyperscript-to-jsx 2. hyperscript-to-jsx: 2. hyperscript-to-jsx 1`] = `
+"
+import h from 'h';
+import hx from 'hx';
+     const StatelessWithReturn = props => {
+  return h(\\".class\\");
+};
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import React from 'react';
+import h from 'h';
+import hx from 'hx';
+const StatelessWithReturn = props => {
+  return <div className=\\"class\\" />;
+};
+
+"
+`;
+
+exports[`hyperscript-to-jsx 3. hyperscript-to-jsx: 3. hyperscript-to-jsx 1`] = `
+"
+import h from 'h';
+import hx from 'hx';
+     const HandlesAssignment = ({ title }) => {
+  title = h(\\"span\\");
+};
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import React from 'react';
+import h from 'h';
+import hx from 'hx';
+const HandlesAssignment = ({ title }) => {
+  title = <span />;
+};
+
+"
+`;
+
+exports[`hyperscript-to-jsx 4. hyperscript-to-jsx: 4. hyperscript-to-jsx 1`] = `
+"
+import h from 'h';
+import hx from 'hx';
+     handleArrays = [
+  h(Sidebar, { categories }),
+  h(CategoryQuestions, { ...question, isBusiness })
+];
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import React from 'react';
+import h from 'h';
+import hx from 'hx';
+handleArrays = [
+  <Sidebar categories={categories} />,
+  <CategoryQuestions {...question} isBusiness={isBusiness} />
+];
+
+"
+`;
+
+exports[`hyperscript-to-jsx 5. hyperscript-to-jsx: 5. hyperscript-to-jsx 1`] = `
+"
+import h from 'h';
+import hx from 'hx';
+   const ClassNameWithDashesSingle = props => h(\\".this-is-dashes\\");
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import React from 'react';
+import h from 'h';
+import hx from 'hx';
+const ClassNameWithDashesSingle = props => <div className=\\"this-is-dashes\\" />;
+
+"
+`;
+
+exports[`hyperscript-to-jsx 6. hyperscript-to-jsx: 6. hyperscript-to-jsx 1`] = `
+"
+import h from 'h';
+import hx from 'hx';
+     const ClassNameWithDashesMulti = props => h(\\".this-is-dashes.dash-afterDash\\");
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import React from 'react';
+import h from 'h';
+import hx from 'hx';
+const ClassNameWithDashesMulti = props => (
+  <div className=\\"this-is-dashes dash-afterDash\\" />
+);
+
+"
+`;
+
+exports[`hyperscript-to-jsx 7. hyperscript-to-jsx: 7. hyperscript-to-jsx 1`] = `
+"
+import h from 'h';
+import hx from 'hx';
+     const JustPropField = h(Stuff, {
+  children: h(FormattedMessage, { ...commonMessages.learnMore })
+});
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import React from 'react';
+import h from 'h';
+import hx from 'hx';
+const JustPropField = (
+  <Stuff children={<FormattedMessage {...commonMessages.learnMore} />} />
+);
+
+"
+`;
+
+exports[`hyperscript-to-jsx 8. hyperscript-to-jsx: 8. hyperscript-to-jsx 1`] = `
+"
+import h from 'h';
+import hx from 'hx';
+     function HyperscriptAsRegularFunction(props) {
+  return h(\\"h1\\");
+}
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import React from 'react';
+import h from 'h';
+import hx from 'hx';
+function HyperscriptAsRegularFunction(props) {
+  return <h1 />;
+}
+
+"
+`;
+
+exports[`hyperscript-to-jsx 9. hyperscript-to-jsx: 9. hyperscript-to-jsx 1`] = `
+"
+import h from 'h';
+import hx from 'hx';
+     const HyperscriptAsVariable = h(\\"div.lol\\", {
+  someProp: \\"lol\\"
+});
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import React from 'react';
+import h from 'h';
+import hx from 'hx';
+const HyperscriptAsVariable = <div className=\\"lol\\" someProp=\\"lol\\" />;
+
+"
+`;
+
+exports[`hyperscript-to-jsx 10. hyperscript-to-jsx: 10. hyperscript-to-jsx 1`] = `
+"
+import h from 'h';
+import hx from 'hx';
+     const HyperscriptWithExpressionAsChildren = h(
+  AnotherComponent,
+  { foo: \\"bar\\", bar: () => ({}), shouldRender: thing.length > 0 },
+  [arr.map(() => h(\\"h1\\"))]
+);
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import React from 'react';
+import h from 'h';
+import hx from 'hx';
+const HyperscriptWithExpressionAsChildren = (
+  <AnotherComponent foo=\\"bar\\" bar={() => ({})} shouldRender={thing.length > 0}>
+    {arr.map(() => <h1 />)}
+  </AnotherComponent>
+);
+
+"
+`;
+
+exports[`hyperscript-to-jsx 11. hyperscript-to-jsx: 11. hyperscript-to-jsx 1`] = `
+"
+import h from 'h';
+import hx from 'hx';
+     // Should be ignored from transforming
+const FirstArgTemplateLiteralWithComputedExpressions = h(\`div.lol\${stuff}\`, {
+  someProp: \\"lol\\"
+});
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import React from 'react';
+import h from 'h';
+import hx from 'hx';
+// Should be ignored from transforming
+const FirstArgTemplateLiteralWithComputedExpressions = h(\`div.lol\${stuff}\`, {
+  someProp: 'lol'
+});
+
+"
+`;
+
+exports[`hyperscript-to-jsx 12. hyperscript-to-jsx: 12. hyperscript-to-jsx 1`] = `
+"
+import h from 'h';
+import hx from 'hx';
+     // Not computed so should be fine
+const FirstArgTemplateLiteral = h(\`div.lol\`, {
+  someProp: \\"lol\\"
+});
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import React from 'react';
+import h from 'h';
+import hx from 'hx';
+// Not computed so should be fine
+const FirstArgTemplateLiteral = <div className=\\"lol\\" someProp=\\"lol\\" />;
+
+"
+`;
+
+exports[`hyperscript-to-jsx 13. hyperscript-to-jsx: 13. hyperscript-to-jsx 1`] = `
+"
+import h from 'h';
+import hx from 'hx';
+     // Should be ignored
+const WhenFirstArgumentIsFunctionThatIsCalled = () =>
+  h(getLoadableAnimation(\\"pageCareersDeliver\\"), [h(fn())]);
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import React from 'react';
+import h from 'h';
+import hx from 'hx';
+// Should be ignored
+const WhenFirstArgumentIsFunctionThatIsCalled = () =>
+  h(getLoadableAnimation('pageCareersDeliver'), [h(fn())]);
+
+"
+`;
+
+exports[`hyperscript-to-jsx 14. hyperscript-to-jsx: 14. hyperscript-to-jsx 1`] = `
+"
+import h from 'h';
+import hx from 'hx';
+ const ComputedRootWithObjectPropertyDeclaration = () =>
+  h(
+    ANIMATIONS[country],
+    {
+      className: \\"lol\\",
+      content: h(\\".selectItem\\", [
+        h(\\"div\\", label),
+        h(\\".flag\\", [
+          h(RoundFlag, {
+            mix: \\"flag\\",
+            size: \\"xs\\",
+            code: currencyData.countryCode
+          }),
+          // Computed not root should be wrapped in {}
+          h(ANIMATIONS[country], { className: \\"lol\\" })
+        ])
+      ])
+    },
+    // This first children in array will be ignored FOR THIS UGLY HACK IN INDEX
+    [
+      h(ANIMATIONS[country], { className: \\"lol\\" }),
+      h(\\"h1\\"),
+      kek && mem,
+      surreal ? lol : kek,
+      t.tabName,
+      lol,
+      <div />
+    ]
+  )
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import React from 'react';
+import h from 'h';
+import hx from 'hx';
+const ComputedRootWithObjectPropertyDeclaration = () =>
+  h(
+    ANIMATIONS[country],
+    {
+      className: 'lol',
+      content: (
+        <div className=\\"selectItem\\">
+          <div>{label}</div>
+          <div className=\\"flag\\">
+            <RoundFlag mix=\\"flag\\" size=\\"xs\\" code={currencyData.countryCode} />
+            {// Computed not root should be wrapped in {}
+            h(ANIMATIONS[country], { className: 'lol' })}
+          </div>
+        </div>
+      )
+    },
+    // This first children in array will be ignored FOR THIS UGLY HACK IN INDEX
+    [
+      h(ANIMATIONS[country], { className: 'lol' }),
+      <h1 />,
+      kek && mem,
+      surreal ? lol : kek,
+      t.tabName,
+      lol,
+      <div />
+    ]
+  );
+
+"
+`;
+
+exports[`hyperscript-to-jsx 15. hyperscript-to-jsx: 15. hyperscript-to-jsx 1`] = `
+"
+import h from 'h';
+import hx from 'hx';
+   h(\\"div\\" + \\"div\\");
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import React from 'react';
+import h from 'h';
+import hx from 'hx';
+h('div' + 'div');
+
+"
+`;
+
+exports[`hyperscript-to-jsx 16. hyperscript-to-jsx: 16. hyperscript-to-jsx 1`] = `
+"
+import h from 'h';
+import hx from 'hx';
+     const ThirdArgOnIgnoredIsNotArray = () =>
+  h(
+    ANIMATIONS[country],
+    {
+      className: \\"lol\\"
+    },
+    // This first children in array will be ignored FOR THIS UGLY HACK IN INDEX
+    children
+  );
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import React from 'react';
+import h from 'h';
+import hx from 'hx';
+const ThirdArgOnIgnoredIsNotArray = () =>
+  h(
+    ANIMATIONS[country],
+    {
+      className: 'lol'
+    },
+    // This first children in array will be ignored FOR THIS UGLY HACK IN INDEX
+    children
+  );
+
+"
+`;
+
+exports[`hyperscript-to-jsx 17. hyperscript-to-jsx: 17. hyperscript-to-jsx 1`] = `
+"
+import h from 'h';
+import hx from 'hx';
+     const SecondArgOnIgnoredIsNotArray = () => h(ANIMATIONS[country], children);
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import React from 'react';
+import h from 'h';
+import hx from 'hx';
+const SecondArgOnIgnoredIsNotArray = () => h(ANIMATIONS[country], children);
+
+"
+`;
+
+exports[`hyperscript-to-jsx 18. hyperscript-to-jsx: 18. hyperscript-to-jsx 1`] = `
+"
+import h from 'h';
+import hx from 'hx';
+     const MultiMemberExpressionWithClosingTag = () =>
+  h(Pricing.lol.kek, { className }, [h(\\"h1\\")]);
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import React from 'react';
+import h from 'h';
+import hx from 'hx';
+const MultiMemberExpressionWithClosingTag = () => (
+  <Pricing.lol.kek className={className}>
+    <h1 />
+  </Pricing.lol.kek>
+);
+
+"
+`;
+
+exports[`hyperscript-to-jsx 19. hyperscript-to-jsx: 19. hyperscript-to-jsx 1`] = `
+"
+import h from 'h';
+import hx from 'hx';
+     // to handle h(Abc, { [kek]: 0, [\\"norm\\"]: 1 }) to < Abc {...{ [kek]: 0 }} {...{ [\\"norm\\" + lol]: 1 }} norm={1} />
+const ComplexComputedAttibutesHandling = () =>
+  h(Abc, { [kek]: 0, [\\"norm\\" + lol]: 1, [\\"ok\\"]: 2 });
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import React from 'react';
+import h from 'h';
+import hx from 'hx';
+// to handle h(Abc, { [kek]: 0, [\\"norm\\"]: 1 }) to < Abc {...{ [kek]: 0 }} {...{ [\\"norm\\" + lol]: 1 }} norm={1} />
+const ComplexComputedAttibutesHandling = () => (
+  <Abc {...{ [kek]: 0 }} {...{ ['norm' + lol]: 1 }} ok={2} />
+);
+
+"
+`;
+
+exports[`hyperscript-to-jsx 20. hyperscript-to-jsx: 20. hyperscript-to-jsx 1`] = `
+"
+import h from 'h';
+import hx from 'hx';
+     // Handle multi classNames css modules (Rev only)
+h(\\".bar.fuzz.stuff\\", [\\"bar fuzz\\"]);
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import React from 'react';
+import h from 'h';
+import hx from 'hx';
+// Handle multi classNames css modules (Rev only)
+<div className=\\"bar fuzz stuff\\">bar fuzz</div>;
+
+"
+`;
+
+exports[`hyperscript-to-jsx 21. hyperscript-to-jsx: 21. hyperscript-to-jsx 1`] = `
+"
+import h from 'h';
+import hx from 'hx';
+     // Should process children but ignore computed parent
+h(\`calcualted \${stuff}\`, { amazing: \\"stuff\\" }, [
+  h(\\"h1\\"),
+  h(\\"h2\\"),
+  h(\\"h3\\"),
+  h(\\"div\\", [h(\\"div\\")])
+]);
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import React from 'react';
+import h from 'h';
+import hx from 'hx';
+// Should process children but ignore computed parent
+h(\`calcualted \${stuff}\`, { amazing: 'stuff' }, [
+  <h1 />,
+  <h2 />,
+  <h3 />,
+  <div>
+    <div />
+  </div>
+]);
+
+"
+`;
+
+exports[`hyperscript-to-jsx Complex real Revolut: Complex real Revolut 1`] = `
 "
 import h from \\"react-hyperscript\\";
 
@@ -676,16 +1156,16 @@ const stuff = {
 "
 `;
 
-exports[`hyperscript-to-jsx Fake all case revolut: Fake all case revolut 1`] = `
+exports[`hyperscript-to-jsx Fake all cases Revolut: Fake all cases Revolut 1`] = `
 "
-import h from \\"react-hyperscript\\";
-
+import h from \\"react-hyperscript\\"
+import { Component, PropTypes } from 'react'
 import hx from \\"shit\\"
 
 const StatelessComponent = props => h(\\"h1\\");
 
 const StatelessWithReturn = props => {
-  return h(\\".class\\");
+  return h(\\".class\\")
 };
 
 const HandlesAssignment = ({ title }) => {
@@ -808,9 +1288,8 @@ class Comp extends React.Component {
 
       ↓ ↓ ↓ ↓ ↓ ↓
 
-import React from 'react';
 import h from 'react-hyperscript';
-
+import React, { Component, PropTypes } from 'react';
 import hx from 'shit';
 
 const StatelessComponent = props => <h1 />;
@@ -973,14 +1452,14 @@ class Comp extends React.Component {
 
 exports[`hyperscript-to-jsx Fake all cases: Fake all cases 1`] = `
 "
-import h from \\"react-hyperscript\\";
-
+import h from \\"react-hyperscript\\"
+import { Component, PropTypes } from 'react'
 import hx from \\"shit\\"
 
 const StatelessComponent = props => h(\\"h1\\");
 
 const StatelessWithReturn = props => {
-  return h(\\".class\\");
+  return h(\\".class\\")
 };
 
 const HandlesAssignment = ({ title }) => {
@@ -1103,9 +1582,8 @@ class Comp extends React.Component {
 
       ↓ ↓ ↓ ↓ ↓ ↓
 
-import React from 'react';
 import h from 'react-hyperscript';
-
+import React, { Component, PropTypes } from 'react';
 import hx from 'shit';
 
 const StatelessComponent = props => <h1 />;
@@ -1258,6 +1736,562 @@ class Comp extends React.Component {
     );
   }
 }
+
+"
+`;
+
+exports[`hyperscript-to-jsx If default import is there, keep it with no affect Revolut: If default import is there, keep it with no affect Revolut 1`] = `
+"
+import React, { Component } from 'react';
+import h from 'hyper';
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import React, { Component } from 'react';
+import h from 'hyper';
+
+"
+`;
+
+exports[`hyperscript-to-jsx If default import is there, keep it with no affect: If default import is there, keep it with no affect 1`] = `
+"
+import React, { Component } from 'react';
+import h from 'hyper';
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import React, { Component } from 'react';
+import h from 'hyper';
+
+"
+`;
+
+exports[`hyperscript-to-jsx Import default added Revolut: Import default added Revolut 1`] = `
+"
+import { Component } from 'react';
+import h from 'hyper';
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import React, { Component } from 'react';
+import h from 'hyper';
+
+"
+`;
+
+exports[`hyperscript-to-jsx Import default added: Import default added 1`] = `
+"
+import { Component } from 'react';
+import h from 'hyper';
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import React, { Component } from 'react';
+import h from 'hyper';
+
+"
+`;
+
+exports[`hyperscript-to-jsx Import default is not added cause no hyperscript Revolut: Import default is not added cause no hyperscript Revolut 1`] = `
+"
+import { Component } from 'react';
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import { Component } from 'react';
+
+"
+`;
+
+exports[`hyperscript-to-jsx Import default is not added cause no hyperscript: Import default is not added cause no hyperscript 1`] = `
+"
+import { Component } from 'react';
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import { Component } from 'react';
+
+"
+`;
+
+exports[`hyperscript-to-jsx undefined Revolut: undefined Revolut 1`] = `
+"
+import h from 'h';
+import hx from 'hx';
+   const StatelessComponent = props => h(\\"h1\\");
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import React from 'react';
+import h from 'h';
+import hx from 'hx';
+const StatelessComponent = props => <h1 />;
+
+"
+`;
+
+exports[`hyperscript-to-jsx undefined Revolut: undefined Revolut 2`] = `
+"
+import h from 'h';
+import hx from 'hx';
+     const StatelessWithReturn = props => {
+  return h(\\".class\\");
+};
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import React from 'react';
+import h from 'h';
+import hx from 'hx';
+const StatelessWithReturn = props => {
+  return <div className={styles.class} />;
+};
+
+"
+`;
+
+exports[`hyperscript-to-jsx undefined Revolut: undefined Revolut 3`] = `
+"
+import h from 'h';
+import hx from 'hx';
+     const HandlesAssignment = ({ title }) => {
+  title = h(\\"span\\");
+};
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import React from 'react';
+import h from 'h';
+import hx from 'hx';
+const HandlesAssignment = ({ title }) => {
+  title = <span />;
+};
+
+"
+`;
+
+exports[`hyperscript-to-jsx undefined Revolut: undefined Revolut 4`] = `
+"
+import h from 'h';
+import hx from 'hx';
+     handleArrays = [
+  h(Sidebar, { categories }),
+  h(CategoryQuestions, { ...question, isBusiness })
+];
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import React from 'react';
+import h from 'h';
+import hx from 'hx';
+handleArrays = [
+  <Sidebar categories={categories} />,
+  <CategoryQuestions {...question} isBusiness={isBusiness} />
+];
+
+"
+`;
+
+exports[`hyperscript-to-jsx undefined Revolut: undefined Revolut 5`] = `
+"
+import h from 'h';
+import hx from 'hx';
+   const ClassNameWithDashesSingle = props => h(\\".this-is-dashes\\");
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import React from 'react';
+import h from 'h';
+import hx from 'hx';
+const ClassNameWithDashesSingle = props => (
+  <div className={styles['this-is-dashes']} />
+);
+
+"
+`;
+
+exports[`hyperscript-to-jsx undefined Revolut: undefined Revolut 6`] = `
+"
+import h from 'h';
+import hx from 'hx';
+     const ClassNameWithDashesMulti = props => h(\\".this-is-dashes.dash-afterDash\\");
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import React from 'react';
+import h from 'h';
+import hx from 'hx';
+const ClassNameWithDashesMulti = props => (
+  <div className={\`\${styles['this-is-dashes']} \${styles['dash-afterDash']}\`} />
+);
+
+"
+`;
+
+exports[`hyperscript-to-jsx undefined Revolut: undefined Revolut 7`] = `
+"
+import h from 'h';
+import hx from 'hx';
+     const JustPropField = h(Stuff, {
+  children: h(FormattedMessage, { ...commonMessages.learnMore })
+});
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import React from 'react';
+import h from 'h';
+import hx from 'hx';
+const JustPropField = (
+  <Stuff children={<FormattedMessage {...commonMessages.learnMore} />} />
+);
+
+"
+`;
+
+exports[`hyperscript-to-jsx undefined Revolut: undefined Revolut 8`] = `
+"
+import h from 'h';
+import hx from 'hx';
+     function HyperscriptAsRegularFunction(props) {
+  return h(\\"h1\\");
+}
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import React from 'react';
+import h from 'h';
+import hx from 'hx';
+function HyperscriptAsRegularFunction(props) {
+  return <h1 />;
+}
+
+"
+`;
+
+exports[`hyperscript-to-jsx undefined Revolut: undefined Revolut 9`] = `
+"
+import h from 'h';
+import hx from 'hx';
+     const HyperscriptAsVariable = h(\\"div.lol\\", {
+  someProp: \\"lol\\"
+});
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import React from 'react';
+import h from 'h';
+import hx from 'hx';
+const HyperscriptAsVariable = <div className={styles.lol} someProp=\\"lol\\" />;
+
+"
+`;
+
+exports[`hyperscript-to-jsx undefined Revolut: undefined Revolut 10`] = `
+"
+import h from 'h';
+import hx from 'hx';
+     const HyperscriptWithExpressionAsChildren = h(
+  AnotherComponent,
+  { foo: \\"bar\\", bar: () => ({}), shouldRender: thing.length > 0 },
+  [arr.map(() => h(\\"h1\\"))]
+);
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import React from 'react';
+import h from 'h';
+import hx from 'hx';
+const HyperscriptWithExpressionAsChildren = thing.length > 0 && (
+  <AnotherComponent foo=\\"bar\\" bar={() => ({})} shouldRender={thing.length > 0}>
+    {arr.map(() => <h1 />)}
+  </AnotherComponent>
+);
+
+"
+`;
+
+exports[`hyperscript-to-jsx undefined Revolut: undefined Revolut 11`] = `
+"
+import h from 'h';
+import hx from 'hx';
+     // Should be ignored from transforming
+const FirstArgTemplateLiteralWithComputedExpressions = h(\`div.lol\${stuff}\`, {
+  someProp: \\"lol\\"
+});
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import React from 'react';
+import h from 'h';
+import hx from 'hx';
+// Should be ignored from transforming
+const FirstArgTemplateLiteralWithComputedExpressions = h(\`div.lol\${stuff}\`, {
+  someProp: 'lol'
+});
+
+"
+`;
+
+exports[`hyperscript-to-jsx undefined Revolut: undefined Revolut 12`] = `
+"
+import h from 'h';
+import hx from 'hx';
+     // Not computed so should be fine
+const FirstArgTemplateLiteral = h(\`div.lol\`, {
+  someProp: \\"lol\\"
+});
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import React from 'react';
+import h from 'h';
+import hx from 'hx';
+// Not computed so should be fine
+const FirstArgTemplateLiteral = <div className={styles.lol} someProp=\\"lol\\" />;
+
+"
+`;
+
+exports[`hyperscript-to-jsx undefined Revolut: undefined Revolut 13`] = `
+"
+import h from 'h';
+import hx from 'hx';
+     // Should be ignored
+const WhenFirstArgumentIsFunctionThatIsCalled = () =>
+  h(getLoadableAnimation(\\"pageCareersDeliver\\"), [h(fn())]);
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import React from 'react';
+import h from 'h';
+import hx from 'hx';
+// Should be ignored
+const WhenFirstArgumentIsFunctionThatIsCalled = () =>
+  h(getLoadableAnimation('pageCareersDeliver'), [h(fn())]);
+
+"
+`;
+
+exports[`hyperscript-to-jsx undefined Revolut: undefined Revolut 14`] = `
+"
+import h from 'h';
+import hx from 'hx';
+ const ComputedRootWithObjectPropertyDeclaration = () =>
+  h(
+    ANIMATIONS[country],
+    {
+      className: \\"lol\\",
+      content: h(\\".selectItem\\", [
+        h(\\"div\\", label),
+        h(\\".flag\\", [
+          h(RoundFlag, {
+            mix: \\"flag\\",
+            size: \\"xs\\",
+            code: currencyData.countryCode
+          }),
+          // Computed not root should be wrapped in {}
+          h(ANIMATIONS[country], { className: \\"lol\\" })
+        ])
+      ])
+    },
+    // This first children in array will be ignored FOR THIS UGLY HACK IN INDEX
+    [
+      h(ANIMATIONS[country], { className: \\"lol\\" }),
+      h(\\"h1\\"),
+      kek && mem,
+      surreal ? lol : kek,
+      t.tabName,
+      lol,
+      <div />
+    ]
+  )
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import React from 'react';
+import h from 'h';
+import hx from 'hx';
+const ComputedRootWithObjectPropertyDeclaration = () =>
+  h(
+    ANIMATIONS[country],
+    {
+      className: 'lol',
+      content: (
+        <div className={styles.selectItem}>
+          <div>{label}</div>
+          <div className={styles.flag}>
+            <RoundFlag mix=\\"flag\\" size=\\"xs\\" code={currencyData.countryCode} />
+            {// Computed not root should be wrapped in {}
+            h(ANIMATIONS[country], { className: 'lol' })}
+          </div>
+        </div>
+      )
+    },
+    // This first children in array will be ignored FOR THIS UGLY HACK IN INDEX
+    [
+      h(ANIMATIONS[country], { className: 'lol' }),
+      <h1 />,
+      kek && mem,
+      surreal ? lol : kek,
+      t.tabName,
+      lol,
+      <div />
+    ]
+  );
+
+"
+`;
+
+exports[`hyperscript-to-jsx undefined Revolut: undefined Revolut 15`] = `
+"
+import h from 'h';
+import hx from 'hx';
+   h(\\"div\\" + \\"div\\");
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import React from 'react';
+import h from 'h';
+import hx from 'hx';
+h('div' + 'div');
+
+"
+`;
+
+exports[`hyperscript-to-jsx undefined Revolut: undefined Revolut 16`] = `
+"
+import h from 'h';
+import hx from 'hx';
+     const ThirdArgOnIgnoredIsNotArray = () =>
+  h(
+    ANIMATIONS[country],
+    {
+      className: \\"lol\\"
+    },
+    // This first children in array will be ignored FOR THIS UGLY HACK IN INDEX
+    children
+  );
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import React from 'react';
+import h from 'h';
+import hx from 'hx';
+const ThirdArgOnIgnoredIsNotArray = () =>
+  h(
+    ANIMATIONS[country],
+    {
+      className: 'lol'
+    },
+    // This first children in array will be ignored FOR THIS UGLY HACK IN INDEX
+    children
+  );
+
+"
+`;
+
+exports[`hyperscript-to-jsx undefined Revolut: undefined Revolut 17`] = `
+"
+import h from 'h';
+import hx from 'hx';
+     const SecondArgOnIgnoredIsNotArray = () => h(ANIMATIONS[country], children);
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import React from 'react';
+import h from 'h';
+import hx from 'hx';
+const SecondArgOnIgnoredIsNotArray = () => h(ANIMATIONS[country], children);
+
+"
+`;
+
+exports[`hyperscript-to-jsx undefined Revolut: undefined Revolut 18`] = `
+"
+import h from 'h';
+import hx from 'hx';
+     const MultiMemberExpressionWithClosingTag = () =>
+  h(Pricing.lol.kek, { className }, [h(\\"h1\\")]);
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import React from 'react';
+import h from 'h';
+import hx from 'hx';
+const MultiMemberExpressionWithClosingTag = () => (
+  <Pricing.lol.kek className={className}>
+    <h1 />
+  </Pricing.lol.kek>
+);
+
+"
+`;
+
+exports[`hyperscript-to-jsx undefined Revolut: undefined Revolut 19`] = `
+"
+import h from 'h';
+import hx from 'hx';
+     // to handle h(Abc, { [kek]: 0, [\\"norm\\"]: 1 }) to < Abc {...{ [kek]: 0 }} {...{ [\\"norm\\" + lol]: 1 }} norm={1} />
+const ComplexComputedAttibutesHandling = () =>
+  h(Abc, { [kek]: 0, [\\"norm\\" + lol]: 1, [\\"ok\\"]: 2 });
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import React from 'react';
+import h from 'h';
+import hx from 'hx';
+// to handle h(Abc, { [kek]: 0, [\\"norm\\"]: 1 }) to < Abc {...{ [kek]: 0 }} {...{ [\\"norm\\" + lol]: 1 }} norm={1} />
+const ComplexComputedAttibutesHandling = () => (
+  <Abc {...{ [kek]: 0 }} {...{ ['norm' + lol]: 1 }} ok={2} />
+);
+
+"
+`;
+
+exports[`hyperscript-to-jsx undefined Revolut: undefined Revolut 20`] = `
+"
+import h from 'h';
+import hx from 'hx';
+     // Handle multi classNames css modules (Rev only)
+h(\\".bar.fuzz.stuff\\", [\\"bar fuzz\\"]);
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import React from 'react';
+import h from 'h';
+import hx from 'hx';
+// Handle multi classNames css modules (Rev only)
+<div className={\`\${styles.bar} \${styles.fuzz} \${styles.stuff}\`}>bar fuzz</div>;
+
+"
+`;
+
+exports[`hyperscript-to-jsx undefined Revolut: undefined Revolut 21`] = `
+"
+import h from 'h';
+import hx from 'hx';
+     // Should process children but ignore computed parent
+h(\`calcualted \${stuff}\`, { amazing: \\"stuff\\" }, [
+  h(\\"h1\\"),
+  h(\\"h2\\"),
+  h(\\"h3\\"),
+  h(\\"div\\", [h(\\"div\\")])
+]);
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import React from 'react';
+import h from 'h';
+import hx from 'hx';
+// Should process children but ignore computed parent
+h(\`calcualted \${stuff}\`, { amazing: 'stuff' }, [
+  <h1 />,
+  <h2 />,
+  <h3 />,
+  <div>
+    <div />
+  </div>
+]);
 
 "
 `;

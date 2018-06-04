@@ -1,176 +1,219 @@
 "use strict";
 
-const check = require("../../manualRun.js").check;
 const pluginTester = require("babel-plugin-tester");
 const hyperToJsxTransform = require("../index.js");
 const prettier = require("prettier");
+const { check, complexExample } = require("./cases");
 
-const complexExample = `import h from "react-hyperscript";
+const hAndhxImports = `import h from 'h';
+import hx from 'hx';`;
 
-const StatelessComponent = props => h("h1");
+const tests = [
+  {
+    title: "Fake all cases",
+    code: check
+  },
+  { title: "Complex real", code: complexExample },
+  {
+    title: "Import default added",
+    code: `
+    import { Component } from 'react';
+    import h from 'hyper';
+    `
+  },
+  {
+    title: "Import default is not added cause no hyperscript",
+    code: `
+    import { Component } from 'react';
+    `
+  },
+  {
+    title: "If default import is there, keep it with no affect",
+    code: `
+    import React, { Component } from 'react';
+    import h from 'hyper';
+    `
+  },
+  {
+    code: `${hAndhxImports}
+   const StatelessComponent = props => h("h1");`
+  },
 
-let dropdownCurrencies = currencyCodes.map((c) => {
-  let currencyData = getCurrency(c)
-  let label = isMobile() ? currencyData.id : \`\${currencyData.id} – \${
-  currencyData.title
-}\`
-  return {
-    key: c,
-    content: h('.selectItem', [
-      h('div', label),
-      h('.flag', [
-        h(RoundFlag, { mix: 'flag', size: 'xs', code: currencyData.countryCode })
-      ])
-    ])
-  }
-})
+  {
+    code: `${hAndhxImports}
+     const StatelessWithReturn = props => {
+  return h(".class");
+};`
+  },
+  {
+    code: `${hAndhxImports}
+     const HandlesAssignment = ({ title }) => {
+  title = h("span");
+};`
+  },
+  {
+    code: `${hAndhxImports}
+     handleArrays = [
+  h(Sidebar, { categories }),
+  h(CategoryQuestions, { ...question, isBusiness })
+];`
+  },
 
-const StatelessWithReturn = props => {
-  return h(".class", { shouldRender: lol.length > 0 });
-};
-
-function named(props) {
+  {
+    code: `${hAndhxImports}
+   const ClassNameWithDashesSingle = props => h(".this-is-dashes");`
+  },
+  {
+    code: `${hAndhxImports}
+     const ClassNameWithDashesMulti = props => h(".this-is-dashes.dash-afterDash");`
+  },
+  {
+    code: `${hAndhxImports}
+     const JustPropField = h(Stuff, {
+  children: h(FormattedMessage, { ...commonMessages.learnMore })
+});`
+  },
+  {
+    code: `${hAndhxImports}
+     function HyperscriptAsRegularFunction(props) {
   return h("h1");
-}
-
-class Comp extends React.Component {
-  render() {
-    return h(".categories", [
-      categories.map(({ key, title, children, url: categoryURL }) =>
-        h(".category", { key }, [
-          sectionsImages[key] &&
-            h(sectionsImages[key], { className: styles.animation }),
-          h(Heading, { level: 2, tag: "h2", spacing: "half" }, title),
-          h("ul", [
-            children.map((item, index, arr) => {
-              const { url, title } = item;
-              if (index > 3) {
-                return null;
-              }
-              if (index === 3 && arr.length > 4) {
-                return h("li.viewMore", { key: item.key }, [
-                  h(FormattedMessage, { ...messages.viewMore }, message =>
-                    h(HelpLink, {
-                      url: enhanceUrlEmbedded(categoryURL),
-                      title: message,
-                      scrollToTop: true
-                    })
-                  )
-                ]);
-              }
-              return h("li", { key: item.key }, [
-                h(HelpLink, { url: enhanceUrlEmbedded(url), title })
-              ]);
-            })
-          ])
+}`
+  },
+  {
+    code: `${hAndhxImports}
+     const HyperscriptAsVariable = h("div.lol", {
+  someProp: "lol"
+});`
+  },
+  {
+    code: `${hAndhxImports}
+     const HyperscriptWithExpressionAsChildren = h(
+  AnotherComponent,
+  { foo: "bar", bar: () => ({}), shouldRender: thing.length > 0 },
+  [arr.map(() => h("h1"))]
+);`
+  },
+  {
+    code: `${hAndhxImports}
+     // Should be ignored from transforming
+const FirstArgTemplateLiteralWithComputedExpressions = h(\`div.lol\${stuff}\`, {
+  someProp: "lol"
+});`
+  },
+  {
+    code: `${hAndhxImports}
+     // Not computed so should be fine
+const FirstArgTemplateLiteral = h(\`div.lol\`, {
+  someProp: "lol"
+});`
+  },
+  {
+    code: `${hAndhxImports}
+     // Should be ignored
+const WhenFirstArgumentIsFunctionThatIsCalled = () =>
+  h(getLoadableAnimation("pageCareersDeliver"), [h(fn())]);`
+  },
+  {
+    code: `${hAndhxImports}
+ const ComputedRootWithObjectPropertyDeclaration = () =>
+  h(
+    ANIMATIONS[country],
+    {
+      className: "lol",
+      content: h(".selectItem", [
+        h("div", label),
+        h(".flag", [
+          h(RoundFlag, {
+            mix: "flag",
+            size: "xs",
+            code: currencyData.countryCode
+          }),
+          // Computed not root should be wrapped in {}
+          h(ANIMATIONS[country], { className: "lol" })
         ])
-      ),
-      h(".helpFeatures", [
-        h(".feature", [
-          h(Link, { href: "https://community.revolut.com" }, [
-            h("img", { src: communityIMG }),
-            h(".text", [
-              h(FormattedMessage, { ...messages.communityTitle }, message =>
-                h(Heading, { level: 6, tag: "h4", spacing: "half" }, message)
-              ),
-              h(FormattedMessage, { ...messages.communitySubtitle })
-            ])
-          ])
-        ]),
-        h(".feature", [
-          h(Link, { href: "https://blog.revolut.com" }, [
-            h("img", { src: blogIMG }),
-            h(".text", [
-              h(FormattedMessage, { ...messages.blogTitle }, message =>
-                h(Heading, { level: 6, tag: "h4", spacing: "half" }, message)
-              ),
-              h(FormattedMessage, { ...messages.blogSubtitle })
-            ])
-          ])
-        ]),
-        isBusiness && h(".feature", [
-              h(
-                Link,
-                {
-                  href: isEmbeddedBusiness()
-                    ? "https://www.revolut.com/business/openapi"
-                    : "/business/openapi"
-                },
-                [
-                  h("img", { src: apiIMG }),
-                  h(".text", [
-                    h(FormattedMessage, { ...messages.apiTitle }, message =>
-                      h(
-                        Heading,
-                        { level: 6, tag: "h4", spacing: "half" },
-                        message
-                      )
-                    ),
-                    h(FormattedMessage, { ...messages.apiSubtitle })
-                  ])
-                ]
-              )
-            ])
-        ,
-        isBusiness
-          ? h(".feature", [
-              h(
-                Link,
-                {
-                  href: isEmbeddedBusiness()
-                    ? "https://www.revolut.com/business/openapi"
-                    : "/business/openapi"
-                },
-                [
-                  h("img", { src: apiIMG }),
-                  h(".text", [
-                    h(FormattedMessage, { ...messages.apiTitle }, message =>
-                      h(
-                        Heading,
-                        { level: 6, tag: "h4", spacing: "half" },
-                        message
-                      )
-                    ),
-                    h(FormattedMessage, { ...messages.apiSubtitle })
-                  ])
-                ]
-              )
-            ])
-          : h(".feature", [
-              h("img", { src: chatIMG }),
-              h(".text", [
-                h(FormattedMessage, { ...messages.chatTitle }, message =>
-                  h(Heading, { level: 6, tag: "h4", spacing: "half" }, message)
-                ),
-                h(FormattedMessage, { ...messages.chatSubtitle })
-              ])
-            ])
       ])
-    ]);
-  }
-}
+    },
+    // This first children in array will be ignored FOR THIS UGLY HACK IN INDEX
+    [
+      h(ANIMATIONS[country], { className: "lol" }),
+      h("h1"),
+      kek && mem,
+      surreal ? lol : kek,
+      t.tabName,
+      lol,
+      <div />
+    ]
+  )`
+  },
+  {
+    code: `${hAndhxImports}
+   h("div" + "div");`
+  },
+  {
+    code: `${hAndhxImports}
+     const ThirdArgOnIgnoredIsNotArray = () =>
+  h(
+    ANIMATIONS[country],
+    {
+      className: "lol"
+    },
+    // This first children in array will be ignored FOR THIS UGLY HACK IN INDEX
+    children
+  );`
+  },
+  {
+    code: `${hAndhxImports}
+     const SecondArgOnIgnoredIsNotArray = () => h(ANIMATIONS[country], children);`
+  },
 
-const stuff = {
-  fn() {
-    <div>{label}</div>
-    h('div', label)
-    return <div>{label}</div>
+  {
+    code: `${hAndhxImports}
+     const MultiMemberExpressionWithClosingTag = () =>
+  h(Pricing.lol.kek, { className }, [h("h1")]);`
+  },
+  {
+    code: `${hAndhxImports}
+     // to handle h(Abc, { [kek]: 0, ["norm"]: 1 }) to < Abc {...{ [kek]: 0 }} {...{ ["norm" + lol]: 1 }} norm={1} />
+const ComplexComputedAttibutesHandling = () =>
+  h(Abc, { [kek]: 0, ["norm" + lol]: 1, ["ok"]: 2 });`
+  },
+  {
+    code: `${hAndhxImports}
+     // Handle multi classNames css modules (Rev only)
+h(".bar.fuzz.stuff", ["bar fuzz"]);`
+  },
+  {
+    code: `${hAndhxImports}
+     // Should process children but ignore computed parent
+h(\`calcualted \${stuff}\`, { amazing: "stuff" }, [
+  h("h1"),
+  h("h2"),
+  h("h3"),
+  h("div", [h("div")])
+]);`
   }
-}`;
+];
 
 pluginTester({
   pluginName: "hyperscript-to-jsx",
   plugin: hyperToJsxTransform,
   snapshot: true,
   formatResult: output =>
-    prettier.format(output, { semi: true, singleQuote: true }),
+    prettier.format(output, {
+      semi: true,
+      singleQuote: true,
+      parser: "babylon"
+    }),
   tests: [
-    {
-      title: "Fake all cases",
-      code: check
-    },
-    { title: "Complex real", code: complexExample },
-    { title: "Fake all case revolut", code: check, pluginOptions: { revolut: true } },
-    { title: "Complex real revo", code: complexExample, pluginOptions: { revolut: true }  },
+    ...tests,
+    ...tests.map(test => ({
+      ...test,
+      title: `${test.title} Revolut`,
+      pluginOptions: { revolut: true }
+    }))
   ]
 });
+
+module.exports = {
+  check
+};
