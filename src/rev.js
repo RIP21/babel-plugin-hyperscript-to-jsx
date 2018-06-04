@@ -94,28 +94,8 @@ const injectChildren = (jsxElem, node) => {
   }
 };
 
-const transformChildrenArray = (node, noExpressionContainers) => {
+const transformChildrenArray = node => {
   return node.elements.map(element => {
-    // Ugliest hack I ever wrote, but this is to avoid putting computed hyperscript calls into the JSXExpressionContainer for ignored computed root h calls
-    if (
-      ((t.isJSXElement(element) ||
-        t.isLogicalExpression(element) ||
-        t.isConditionalExpression(element) ||
-        t.isMemberExpression(element) ||
-        t.isIdentifier(element)) &&
-        noExpressionContainers) ||
-      (isHyperscriptCall(element) &&
-        noExpressionContainers &&
-        element.arguments &&
-        element.arguments[0] &&
-        (element.arguments[0].computed ||
-          (t.isTemplateLiteral(element.arguments[0]) &&
-            element.arguments[0].expressions.length > 0) ||
-          (element.arguments[0].arguments &&
-            element.arguments[0].arguments.length >= 0)))
-    ) {
-      return element;
-    }
     if (isHyperscriptCall(element)) {
       return transformHyperscriptToJsx(element, false);
     }
@@ -128,41 +108,34 @@ const transformChildrenArray = (node, noExpressionContainers) => {
   });
 };
 
+const convertToStringLiteral = node =>
+  t.stringLiteral(node.quasis[0].value.raw);
+
 const transformHyperscriptToJsx = (node, isTopLevelCall) => {
-  const [firstArg, secondArg, thirdArg] = node.arguments;
+  // Intermediate cause first need to be checked on some corner cases
+  const [intermediateFirstArg, secondArg, thirdArg] = node.arguments;
   // Handling few corner cases down here
 
-  // Handling of h(obj[field]) and h(`stuff ${computed}`) to ignore and convert to StringLiteral if possible
-  const isTemplateLiteral = t.isTemplateLiteral(firstArg);
-  const hasExpressions = isTemplateLiteral && firstArg.expressions.length;
+  // Handling of h(obj[field]) or h(fn()) and h(`stuff ${computed}`) to ignore and convert to StringLiteral if possible
+  const isTemplateLiteral = t.isTemplateLiteral(intermediateFirstArg);
+  const hasExpressions =
+    isTemplateLiteral && intermediateFirstArg.expressions.length;
   const isComputedClassNameOrComponent =
-    firstArg.computed || hasExpressions || t.isBinaryExpression(firstArg);
-  // Intermediate value to convert to StringLiteral if TemplateLiteral has no expressions
-  let firstArgument;
-  if (isTemplateLiteral && !hasExpressions) {
-    firstArgument = t.stringLiteral(firstArg.quasis[0].value.raw);
-  } else {
-    firstArgument = firstArg;
-  }
+    intermediateFirstArg.computed ||
+    hasExpressions ||
+    t.isBinaryExpression(intermediateFirstArg);
   const isFirstArgIsCalledFunction =
-    firstArg.arguments && firstArg.arguments.length >= 0;
-  if (
-    (isComputedClassNameOrComponent || isFirstArgIsCalledFunction) &&
-    isTopLevelCall
-  ) {
-    // If top level call just keep node as is
-    if (t.isArrayExpression(secondArg) && !thirdArg) {
-      secondArg.elements = transformChildrenArray(secondArg, true);
-    }
-    if (t.isArrayExpression(thirdArg)) {
-      // This will recursively process all children nodes to get JSX/Expressions array
-      // Second parameter is for ugly hack :P
-      thirdArg.elements = transformChildrenArray(thirdArg, true);
-    }
-    return node;
-  } else if (isComputedClassNameOrComponent || isFirstArgIsCalledFunction) {
-    // If nested in JSX wrap in expression container
-    return t.JSXExpressionContainer(node);
+    intermediateFirstArg.arguments &&
+    intermediateFirstArg.arguments.length >= 0;
+  // Intermediate value to convert to StringLiteral if TemplateLiteral has no expressions
+  const firstArgument =
+    isTemplateLiteral && !hasExpressions
+      ? convertToStringLiteral(intermediateFirstArg)
+      : intermediateFirstArg;
+
+  // If firstArg is computed should be ignored, but inside the JSX should be wrapped into JSXExprContainer
+  if (isComputedClassNameOrComponent || isFirstArgIsCalledFunction) {
+    return isTopLevelCall ? node : t.JSXExpressionContainer(node);
   }
 
   switch (node.arguments.length) {
@@ -265,8 +238,7 @@ const twoArgumentsCase = (firstArg, secondArg, thirdArgIsAbsent) => {
         shouldRenderExpression,
         jsxElem
       );
-      const jsxExprContainer = t.JSXExpressionContainer(logicalExpression);
-      return jsxExprContainer;
+      return t.JSXExpressionContainer(logicalExpression);
     }
     return jsxElem;
   }

@@ -89,28 +89,8 @@ const injectChildren = (jsxElem, node) => {
   }
 };
 
-const transformChildrenArray = (node, noExpressionContainers) => {
+const transformChildrenArray = node => {
   return node.elements.map(element => {
-    // Ugliest hack I ever wrote, but this is to avoid putting computed hyperscript calls into the JSXExpressionContainer for ignored computed root h calls
-    if (
-      ((t.isJSXElement(element) ||
-        t.isLogicalExpression(element) ||
-        t.isConditionalExpression(element) ||
-        t.isMemberExpression(element) ||
-        t.isIdentifier(element)) &&
-        noExpressionContainers) ||
-      (isHyperscriptCall(element) &&
-        noExpressionContainers &&
-        element.arguments &&
-        element.arguments[0] &&
-        (element.arguments[0].computed ||
-          (t.isTemplateLiteral(element.arguments[0]) &&
-            element.arguments[0].expressions.length > 0) ||
-          (element.arguments[0].arguments &&
-            element.arguments[0].arguments.length >= 0)))
-    ) {
-      return element;
-    }
     if (isHyperscriptCall(element)) {
       return transformHyperscriptToJsx(element, false);
     }
@@ -123,41 +103,34 @@ const transformChildrenArray = (node, noExpressionContainers) => {
   });
 };
 
+const convertToStringLiteral = node =>
+  t.stringLiteral(node.quasis[0].value.raw);
+
 const transformHyperscriptToJsx = (node, isTopLevelCall) => {
-  const [firstArg, secondArg, thirdArg] = node.arguments;
+  // Intermediate cause first need to be checked on some corner cases
+  const [intermediateFirstArg, secondArg, thirdArg] = node.arguments;
   // Handling few corner cases down here
 
-  // Handling of h(obj[field]) and h(`stuff ${computed}`) to ignore and convert to StringLiteral if possible
-  const isTemplateLiteral = t.isTemplateLiteral(firstArg);
-  const hasExpressions = isTemplateLiteral && firstArg.expressions.length;
+  // Handling of h(obj[field]) or h(fn()) and h(`stuff ${computed}`) to ignore and convert to StringLiteral if possible
+  const isTemplateLiteral = t.isTemplateLiteral(intermediateFirstArg);
+  const hasExpressions =
+    isTemplateLiteral && intermediateFirstArg.expressions.length;
   const isComputedClassNameOrComponent =
-    firstArg.computed || hasExpressions || t.isBinaryExpression(firstArg);
-  // Intermediate value to convert to StringLiteral if TemplateLiteral has no expressions
-  let firstArgument;
-  if (isTemplateLiteral && !hasExpressions) {
-    firstArgument = t.stringLiteral(firstArg.quasis[0].value.raw);
-  } else {
-    firstArgument = firstArg;
-  }
+    intermediateFirstArg.computed ||
+    hasExpressions ||
+    t.isBinaryExpression(intermediateFirstArg);
   const isFirstArgIsCalledFunction =
-    firstArg.arguments && firstArg.arguments.length >= 0;
-  if (
-    (isComputedClassNameOrComponent || isFirstArgIsCalledFunction) &&
-    isTopLevelCall
-  ) {
-    // If top level call just keep node as is
-    if (t.isArrayExpression(secondArg) && !thirdArg) {
-      secondArg.elements = transformChildrenArray(secondArg, true);
-    }
-    if (t.isArrayExpression(thirdArg)) {
-      // This will recursively process all children nodes to get JSX/Expressions array
-      // Second parameter is for ugly hack :P
-      thirdArg.elements = transformChildrenArray(thirdArg, true);
-    }
-    return node;
-  } else if (isComputedClassNameOrComponent || isFirstArgIsCalledFunction) {
-    // If nested in JSX wrap in expression container
-    return t.JSXExpressionContainer(node);
+    intermediateFirstArg.arguments &&
+    intermediateFirstArg.arguments.length >= 0;
+  // Intermediate value to convert to StringLiteral if TemplateLiteral has no expressions
+  const firstArgument =
+    isTemplateLiteral && !hasExpressions
+      ? convertToStringLiteral(intermediateFirstArg)
+      : intermediateFirstArg;
+
+  // If firstArg is computed should be ignored, but inside the JSX should be wrapped into JSXExprContainer
+  if (isComputedClassNameOrComponent || isFirstArgIsCalledFunction) {
+    return isTopLevelCall ? node : t.JSXExpressionContainer(node);
   }
 
   switch (node.arguments.length) {
@@ -267,12 +240,13 @@ module.exports = function() {
           }
         });
         let isReactDefaultImportInScope = false;
-        let reactImport = false;
+        let reactImportNode = false;
         let isReactImportIsInScope = false;
+        // Note that: Array.some is short circuit function, so will stop on a halfway if true is returned
         path.node.body.some(arg => {
           if (t.isImportDeclaration(arg)) {
             isReactImportIsInScope = arg.source.value === "react";
-            reactImport = isReactImportIsInScope ? arg : false;
+            reactImportNode = isReactImportIsInScope ? arg : false;
             isReactDefaultImportInScope = arg.specifiers.some(
               it =>
                 t.isImportDefaultSpecifier(it) &&
@@ -283,23 +257,25 @@ module.exports = function() {
           }
           return false;
         });
-        if (
+        const shouldAddReactImport =
+          !isReactImportIsInScope && isHyperscriptInScope;
+        const shouldModifyReactImport =
           isReactImportIsInScope &&
           !isReactDefaultImportInScope &&
-          isHyperscriptInScope
-        ) {
-          reactImport.specifiers.unshift(
+          isHyperscriptInScope;
+        if (shouldModifyReactImport) {
+          reactImportNode.specifiers.unshift(
             t.importDefaultSpecifier(t.identifier("React"))
           );
-        } else if (!isReactImportIsInScope && isHyperscriptInScope) {
+        } else if (shouldAddReactImport) {
           path.node.body.unshift(
             t.ImportDeclaration(
-              [t.ImportDefaultSpecifier(t.Identifier("React"))],
+              [t.ImportDefaultSpecifier(t.identifier("React"))],
               t.StringLiteral("react")
             )
           );
         }
-        // This is Revolut specific logic ignore it :)
+        // This is Revolut specific logic, ignore it :)
         isCssModules = path.node.body.find(arg => {
           if (t.isVariableDeclaration(arg)) {
             return (
@@ -320,16 +296,16 @@ module.exports = function() {
         if (isHyperscriptInScope) {
           const { node } = path;
           const isTopLevelCall =
-            t.isReturnStatement(path.container) ||
-            t.isConditionalExpression(path.container) ||
-            t.isArrowFunctionExpression(path.container) ||
-            t.isLogicalExpression(path.container) ||
-            t.isObjectProperty(path.container) ||
-            t.isVariableDeclarator(path.container) ||
-            t.isExpressionStatement(path.container) ||
-            t.isJSXExpressionContainer(path.container) ||
-            t.isAssignmentExpression(path.container) ||
-            t.isArrayExpression(path.parent);
+            t.isReturnStatement(path.container) || // return h()
+            t.isConditionalExpression(path.container) || // stuff ? h() : h()
+            t.isArrowFunctionExpression(path.container) || // () => h()
+            t.isLogicalExpression(path.container) || // stuff && h()
+            t.isObjectProperty(path.container) || // { property: h() }
+            t.isVariableDeclarator(path.container) || // const a = h()
+            t.isExpressionStatement(path.container) || // h() <------ stand alone without assignment etc
+            t.isJSXExpressionContainer(path.container) || // <div>{h()}</div>
+            t.isAssignmentExpression(path.container) || // reassignMe = h()
+            t.isArrayExpression(path.parent); // [h()]
           if (isHyperscriptCall(node) && isTopLevelCall) {
             let result = node;
             const isRevolut = getOption(state, "revolut", false);
