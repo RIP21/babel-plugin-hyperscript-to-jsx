@@ -295,3 +295,60 @@ as is, but their array second and third arguments will be processed with the sam
 Fix all that by yourself :)
 
 (it's possible but will require further analysis of AST with hardcore traversal and I don't think it worth it)
+
+## Integration with WebStorm/VS Code to do file by file
+Preconditions:
+```
+npm i -g babel-core babel-codemod babel-plugin-hyperscript-to-jsx
+```
+
+### WebStorm:
+1. Go to Preferences -> External Tools -> Click plus to add tool.
+2. Config:
+```
+Name: h to JSX
+Program: codemod
+Arguments: -p /usr/local/lib/node_modules/babel-plugin-hyperscript-to-jsx/src/index.js -o index={\"revolut\":true} $FilePathRelativeToProjectRoot$
+Working directory: $ProjectFileDir$
+
+In advanced settings:
+Tick on: Sync file after execution
+```
+
+3. Open file you want to transform
+`Right Click -> External Tools -> h to JSX -> Apply prettier/code formatting -> Enjoy`
+4. For even better experience go to.
+`Preferences -> Keymap -> External Tools -> External Tools -> h to JSX -> Attach some key combination`
+
+### VS Code:
+1. Open command pallete
+2. `>Tasks: Configure Task`
+3. Press Up -> Select: `Task from tasks.json template` (or something like that)
+4. Copy and paste this:
+```
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "H to JSX",
+            "type": "shell",
+            "command": "codemod -p /usr/local/lib/node_modules/babel-plugin-hyperscript-to-jsx/src/index.js -o index='{\"revolut\":true}' ${file}"
+        }
+    ]
+}
+```
+5. Open command pallete and ask it to open `keybindings.json`
+6. Add this:
+```
+    {
+        "key": "cmd+e",
+        "command": "workbench.action.tasks.runTask",
+        "args": "H to JSX"
+    }
+```
+7. Open any file and press cmd+e to apply codemod on file.
+8. Or you don't want to bload your keybindings just open Command pallete and type.
+`Run task -> Enter -> Find in the list "H to JSX" -> Enter`
+9. Apply formatting and enjoy
