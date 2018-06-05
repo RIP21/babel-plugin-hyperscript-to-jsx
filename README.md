@@ -334,7 +334,7 @@ Tick on: Sync file after execution
         {
             "label": "H to JSX",
             "type": "shell",
-            "command": "codemod -p /usr/local/lib/node_modules/babel-plugin-hyperscript-to-jsx/src/index.js -o index='{\"revolut\":true}' ${file}"
+            "command": "codemod -p /usr/local/lib/node_modules/babel-plugin-hyperscript-to-jsx/src/index.js ${file}"
         }
     ]
 }
@@ -349,6 +349,13 @@ Tick on: Sync file after execution
     }
 ```
 7. Open any file and press cmd+e to apply codemod on file.
-8. Or you don't want to bload your keybindings just open Command pallete and type.
-`Run task -> Enter -> Find in the list "H to JSX" -> Enter`
+8. Or if you don't want to bloat your `keybindings.json` just open Command pallete and type.
+`Run task -> Enter -> Find in the list "H to JSX" -> Enter` (Usually will be on top)
 9. Apply formatting and enjoy
+
+
+#### For Revolut plugin to work.
+##### Webstorm:
+ - Add to command line arguments `-o index={\"revolut\":true}` before the `$FilePathRelativeToProjectRoot$`
+##### VS Code:
+ - Add to command line arguments `-o index='{\"revolut\":true}'` before the `${file}`
