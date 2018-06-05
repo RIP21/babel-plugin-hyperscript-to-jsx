@@ -308,7 +308,7 @@ npm i -g babel-core babel-codemod babel-plugin-hyperscript-to-jsx
 ```
 Name: h to JSX
 Program: codemod
-Arguments: -p /usr/local/lib/node_modules/babel-plugin-hyperscript-to-jsx/src/index.js -o index={\"revolut\":true} $FilePathRelativeToProjectRoot$
+Arguments: -p /usr/local/lib/node_modules/babel-plugin-hyperscript-to-jsx/src/index.js$FilePathRelativeToProjectRoot$
 Working directory: $ProjectFileDir$
 
 In advanced settings:
