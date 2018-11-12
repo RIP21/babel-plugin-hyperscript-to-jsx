@@ -2,9 +2,9 @@
 [![npm version](https://badge.fury.io/js/babel-plugin-hyperscript-to-jsx.svg)](https://badge.fury.io/js/babel-plugin-hyperscript-to-jsx)
 
 It's a quite complex codemod to migrate from hyperscript to JSX.
-
-Before:
-
+<details>
+  <summary>Code Before:</summary>
+  
 ```javascript
 import h from "react-hyperscript";
 
@@ -118,8 +118,10 @@ class Comp extends React.Component {
   }
 }
 ```
+</details>
 
-After:
+<details>
+  <summary>Code After:</summary>
 
 ```jsx harmony
 import React from 'react'
@@ -256,6 +258,7 @@ class Comp extends React.Component {
 }
 
 ```
+</details>
 
 ## Usage
 
