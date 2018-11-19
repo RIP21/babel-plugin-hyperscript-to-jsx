@@ -80,6 +80,12 @@ const ThirdArgOnIgnoredIsNotArray = () =>
     children
   );
   
+  
+h(isCanada ? doStuff : doAnotherStuff, { someProp: true })
+h('div', isCanada ? someProps : anotherProps)
+h('div', isCanada ? someProps : anotherProps, "SomeChildren")
+
+
 const SecondArgOnIgnoredIsNotArray = () =>
   h(ANIMATIONS[country], children);
   
@@ -147,6 +153,10 @@ let dropdownCurrencies = currencyCodes.map((c) => {
     ])
   }
 })
+
+h(isCanada ? doStuff : doAnotherStuff, { someProp: true })
+h('div', isCanada ? someProps : anotherProps)
+h('div', isCanada ? someProps : anotherProps, "SomeChildren")
 
 const StatelessWithReturn = props => {
   return h(".class", { shouldRender: lol.length > 0 });

@@ -39,7 +39,6 @@ const tests = [
     code: `${hAndhxImports}
    const StatelessComponent = props => h("h1");`
   },
-
   {
     title: "Should handle ArrowFunctions with return",
     code: `${hAndhxImports}
@@ -202,6 +201,14 @@ const WhenFirstArgumentIsFunctionThatIsCalled = () =>
     code: `${hAndhxImports}
      const MultiMemberExpressionWithClosingTag = () =>
   h(Pricing.lol.kek, { className });`
+  },
+  {
+    title: "Should ignore transformation when ConditionalExpression is a first parameter",
+    code: `${hAndhxImports}
+     h(isCanada ? doStuff : doAnotherStuff, { someProp: true })
+     h('div', isCanada ? someProps : anotherProps)
+     h('div', isCanada ? someProps : anotherProps, "SomeChildren")
+     `
   },
   {
     title:

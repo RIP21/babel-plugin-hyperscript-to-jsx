@@ -74,6 +74,10 @@ const ThirdArgOnIgnoredIsNotArray = () =>
     children
   );
 
+h(isCanada ? doStuff : doAnotherStuff, { someProp: true })
+h('div', isCanada ? someProps : anotherProps)
+h('div', isCanada ? someProps : anotherProps, "SomeChildren")
+
 const SecondArgOnIgnoredIsNotArray = () =>
   h(ANIMATIONS[country], children);
 
@@ -193,6 +197,10 @@ const ThirdArgOnIgnoredIsNotArray = () =>
     // This first children in array will be ignored FOR THIS UGLY HACK IN INDEX
     children
   )
+
+h(isCanada ? doStuff : doAnotherStuff, { someProp: true });
+<div>{isCanada ? someProps : anotherProps}</div>;
+<div {...(isCanada ? someProps : anotherProps)}>SomeChildren</div>;
 
 const SecondArgOnIgnoredIsNotArray = () => h(ANIMATIONS[country], children)
 

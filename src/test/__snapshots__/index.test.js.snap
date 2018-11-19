@@ -22,6 +22,10 @@ let dropdownCurrencies = currencyCodes.map((c) => {
   }
 })
 
+h(isCanada ? doStuff : doAnotherStuff, { someProp: true })
+h('div', isCanada ? someProps : anotherProps)
+h('div', isCanada ? someProps : anotherProps, \\"SomeChildren\\")
+
 const StatelessWithReturn = props => {
   return h(\\".class\\", { shouldRender: lol.length > 0 });
 };
@@ -179,6 +183,10 @@ let dropdownCurrencies = currencyCodes.map(c => {
     )
   };
 });
+
+h(isCanada ? doStuff : doAnotherStuff, { someProp: true });
+<div>{isCanada ? someProps : anotherProps}</div>;
+<div {...(isCanada ? someProps : anotherProps)}>SomeChildren</div>;
 
 const StatelessWithReturn = props => {
   return (
@@ -361,6 +369,10 @@ let dropdownCurrencies = currencyCodes.map((c) => {
   }
 })
 
+h(isCanada ? doStuff : doAnotherStuff, { someProp: true })
+h('div', isCanada ? someProps : anotherProps)
+h('div', isCanada ? someProps : anotherProps, \\"SomeChildren\\")
+
 const StatelessWithReturn = props => {
   return h(\\".class\\", { shouldRender: lol.length > 0 });
 };
@@ -518,6 +530,10 @@ let dropdownCurrencies = currencyCodes.map(c => {
     )
   };
 });
+
+h(isCanada ? doStuff : doAnotherStuff, { someProp: true });
+<div>{isCanada ? someProps : anotherProps}</div>;
+<div {...(isCanada ? someProps : anotherProps)}>SomeChildren</div>;
 
 const StatelessWithReturn = props => {
   return <div className=\\"class\\" shouldRender={lol.length > 0} />;
@@ -2232,6 +2248,46 @@ import hx from 'hx';
 const FirstArgTemplateLiteralWithComputedExpressions = h(\`div.lol\${stuff}\`, {
   someProp: 'lol'
 });
+
+"
+`;
+
+exports[`hyperscript-to-jsx Should ignore transformation when ConditionalExpression is a first parameter Revolut: Should ignore transformation when ConditionalExpression is a first parameter Revolut 1`] = `
+"
+import h from 'h';
+import hx from 'hx';
+     h(isCanada ? doStuff : doAnotherStuff, { someProp: true })
+     h('div', isCanada ? someProps : anotherProps)
+     h('div', isCanada ? someProps : anotherProps, \\"SomeChildren\\")
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import React from 'react';
+import h from 'h';
+import hx from 'hx';
+h(isCanada ? doStuff : doAnotherStuff, { someProp: true });
+<div>{isCanada ? someProps : anotherProps}</div>;
+<div {...(isCanada ? someProps : anotherProps)}>SomeChildren</div>;
+
+"
+`;
+
+exports[`hyperscript-to-jsx Should ignore transformation when ConditionalExpression is a first parameter: Should ignore transformation when ConditionalExpression is a first parameter 1`] = `
+"
+import h from 'h';
+import hx from 'hx';
+     h(isCanada ? doStuff : doAnotherStuff, { someProp: true })
+     h('div', isCanada ? someProps : anotherProps)
+     h('div', isCanada ? someProps : anotherProps, \\"SomeChildren\\")
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import React from 'react';
+import h from 'h';
+import hx from 'hx';
+h(isCanada ? doStuff : doAnotherStuff, { someProp: true });
+<div>{isCanada ? someProps : anotherProps}</div>;
+<div {...(isCanada ? someProps : anotherProps)}>SomeChildren</div>;
 
 "
 `;

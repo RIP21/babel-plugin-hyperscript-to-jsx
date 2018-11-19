@@ -132,9 +132,11 @@ const transformHyperscriptToJsx = (node, isTopLevelCall) => {
     isTemplateLiteral && !hasExpressions
       ? convertToStringLiteral(intermediateFirstArg)
       : intermediateFirstArg;
+  const isConditionalExpression =
+    firstArgument.type === "ConditionalExpression"
 
   // If firstArg is computed should be ignored, but inside the JSX should be wrapped into JSXExprContainer
-  if (isComputedClassNameOrComponent || isFirstArgIsCalledFunction) {
+  if (isComputedClassNameOrComponent || isFirstArgIsCalledFunction || isConditionalExpression) {
     return isTopLevelCall ? node : t.JSXExpressionContainer(node);
   }
 
