@@ -6,7 +6,9 @@
   "license": "MIT",
   "author": "https://github.com/RIP21/",
   "main": "src/index.js",
-  "keywords": ["babel-plugin"],
+  "keywords": [
+    "babel-plugin"
+  ],
   "peerDependencies": {
     "@babel/core": "^7.0.0"
   },
