@@ -1,4 +1,4 @@
-const babel = require("babel-core");
+const babel = require("@babel/core");
 const prettier = require("prettier");
 const check = require("./src/test/cases").check;
 
@@ -7,7 +7,7 @@ const result = babel.transform(check, {
 }).code;
 
 console.log(
-  prettier.format(result, { semi: false, singleQuote: true, parser: "babylon" })
+  prettier.format(result, { semi: false, singleQuote: true, parser: "babel" })
 );
 
 module.exports = {

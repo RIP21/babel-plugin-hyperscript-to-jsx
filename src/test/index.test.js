@@ -275,7 +275,7 @@ pluginTester({
     prettier.format(output, {
       semi: true,
       singleQuote: true,
-      parser: "babylon"
+      parser: "babel"
     }),
   tests: [
     ...tests,

@@ -183,8 +183,9 @@ let dropdownCurrencies = currencyCodes.map(c => {
     )
   };
 });
-
-h(isCanada ? doStuff : doAnotherStuff, { someProp: true });
+h(isCanada ? doStuff : doAnotherStuff, {
+  someProp: true
+});
 <div>{isCanada ? someProps : anotherProps}</div>;
 <div {...(isCanada ? someProps : anotherProps)}>SomeChildren</div>;
 
@@ -205,16 +206,20 @@ class Comp extends React.Component {
         {categories.map(({ key, title, children, url: categoryURL }) => (
           <div className=\\"category\\" key={key}>
             {sectionsImages[key] &&
-              h(sectionsImages[key], { className: styles.animation })}
+              h(sectionsImages[key], {
+                className: styles.animation
+              })}
             <Heading level={2} tag=\\"h2\\" spacing=\\"half\\">
               {title}
             </Heading>
             <ul>
               {children.map((item, index, arr) => {
                 const { url, title } = item;
+
                 if (index > 3) {
                   return null;
                 }
+
                 if (index === 3 && arr.length > 4) {
                   return (
                     <li className=\\"viewMore\\" key={item.key}>
@@ -230,6 +235,7 @@ class Comp extends React.Component {
                     </li>
                   );
                 }
+
                 return (
                   <li key={item.key}>
                     <HelpLink url={enhanceUrlEmbedded(url)} title={title} />
@@ -530,8 +536,9 @@ let dropdownCurrencies = currencyCodes.map(c => {
     )
   };
 });
-
-h(isCanada ? doStuff : doAnotherStuff, { someProp: true });
+h(isCanada ? doStuff : doAnotherStuff, {
+  someProp: true
+});
 <div>{isCanada ? someProps : anotherProps}</div>;
 <div {...(isCanada ? someProps : anotherProps)}>SomeChildren</div>;
 
@@ -550,16 +557,20 @@ class Comp extends React.Component {
         {categories.map(({ key, title, children, url: categoryURL }) => (
           <div className=\\"category\\" key={key}>
             {sectionsImages[key] &&
-              h(sectionsImages[key], { className: styles.animation })}
+              h(sectionsImages[key], {
+                className: styles.animation
+              })}
             <Heading level={2} tag=\\"h2\\" spacing=\\"half\\">
               {title}
             </Heading>
             <ul>
               {children.map((item, index, arr) => {
                 const { url, title } = item;
+
                 if (index > 3) {
                   return null;
                 }
+
                 if (index === 3 && arr.length > 4) {
                   return (
                     <li className=\\"viewMore\\" key={item.key}>
@@ -575,6 +586,7 @@ class Comp extends React.Component {
                     </li>
                   );
                 }
+
                 return (
                   <li key={item.key}>
                     <HelpLink url={enhanceUrlEmbedded(url)} title={title} />
@@ -736,6 +748,7 @@ import hx from 'hx';
 import React from 'react';
 import h from 'h';
 import hx from 'hx';
+
 const MultiMemberExpressionWithClosingTag = () => (
   <Pricing.lol.kek className={className} />
 );
@@ -755,6 +768,7 @@ import hx from 'hx';
 import React from 'react';
 import h from 'h';
 import hx from 'hx';
+
 const MultiMemberExpressionWithClosingTag = () => (
   <Pricing.lol.kek className={className} />
 );
@@ -774,6 +788,7 @@ import hx from 'hx';
 import React from 'react';
 import h from 'h';
 import hx from 'hx';
+
 const MultiMemberExpressionWithClosingTag = () => (
   <Pricing.lol.kek className={className}>
     <h1 />
@@ -795,6 +810,7 @@ import hx from 'hx';
 import React from 'react';
 import h from 'h';
 import hx from 'hx';
+
 const MultiMemberExpressionWithClosingTag = () => (
   <Pricing.lol.kek className={className}>
     <h1 />
@@ -887,6 +903,12 @@ const ThirdArgOnIgnoredIsNotArray = () =>
     children
   );
   
+  
+h(isCanada ? doStuff : doAnotherStuff, { someProp: true })
+h('div', isCanada ? someProps : anotherProps)
+h('div', isCanada ? someProps : anotherProps, \\"SomeChildren\\")
+
+
 const SecondArgOnIgnoredIsNotArray = () =>
   h(ANIMATIONS[country], children);
   
@@ -958,9 +980,11 @@ handleArrays = [
 const ClassNameWithDashesSingle = props => (
   <div className={styles['this-is-dashes']} />
 );
+
 const ClassNameWithDashesMulti = props => (
   <div className={\`\${styles['this-is-dashes']} \${styles['dash-afterDash']}\`} />
 );
+
 const JustPropField = (
   <Stuff children={<FormattedMessage {...commonMessages.learnMore} />} />
 );
@@ -970,22 +994,20 @@ function HyperscriptAsRegularFunction(props) {
 }
 
 const HyperscriptAsVariable = <div className={styles.lol} someProp=\\"lol\\" />;
-
 const HyperscriptWithExpressionAsChildren = thing.length > 0 && (
   <AnotherComponent foo=\\"bar\\" bar={() => ({})} shouldRender={thing.length > 0}>
-    {arr.map(() => <h1 />)}
+    {arr.map(() => (
+      <h1 />
+    ))}
   </AnotherComponent>
-);
+); // Should be ignored from transforming
 
-// Should be ignored from transforming
 const FirstArgTemplateLiteralWithComputedExpressions = h(\`div.lol\${stuff}\`, {
   someProp: 'lol'
-});
+}); // Not computed so should be fine
 
-// Not computed so should be fine
-const FirstArgTemplateLiteral = <div className={styles.lol} someProp=\\"lol\\" />;
+const FirstArgTemplateLiteral = <div className={styles.lol} someProp=\\"lol\\" />; // Should be ignored
 
-// Should be ignored
 const WhenFirstArgumentIsFunctionThatIsCalled = () =>
   h(getLoadableAnimation('pageCareersDeliver'), [h(fn())]);
 
@@ -1000,14 +1022,17 @@ const ComputedRootWithObjectPropertyDeclaration = () =>
           <div className={styles.flag}>
             <RoundFlag mix=\\"flag\\" size=\\"xs\\" code={currencyData.countryCode} />
             {// Computed not root should be wrapped in {}
-            h(ANIMATIONS[country], { className: 'lol' })}
+            h(ANIMATIONS[country], {
+              className: 'lol'
+            })}
           </div>
         </div>
       )
-    },
-    // This first children in array will be ignored FOR THIS UGLY HACK IN INDEX
+    }, // This first children in array will be ignored FOR THIS UGLY HACK IN INDEX
     [
-      h(ANIMATIONS[country], { className: 'lol' }),
+      h(ANIMATIONS[country], {
+        className: 'lol'
+      }),
       <h1 />,
       kek && mem,
       surreal ? lol : kek,
@@ -1024,10 +1049,15 @@ const ThirdArgOnIgnoredIsNotArray = () =>
     ANIMATIONS[country],
     {
       className: 'lol'
-    },
-    // This first children in array will be ignored FOR THIS UGLY HACK IN INDEX
+    }, // This first children in array will be ignored FOR THIS UGLY HACK IN INDEX
     children
   );
+
+h(isCanada ? doStuff : doAnotherStuff, {
+  someProp: true
+});
+<div>{isCanada ? someProps : anotherProps}</div>;
+<div {...(isCanada ? someProps : anotherProps)}>SomeChildren</div>;
 
 const SecondArgOnIgnoredIsNotArray = () => h(ANIMATIONS[country], children);
 
@@ -1035,25 +1065,36 @@ const MultiMemberExpressionWithClosingTag = () => (
   <Pricing.lol.kek className={className}>
     <h1 />
   </Pricing.lol.kek>
-);
+); // to handle h(Abc, { [kek]: 0, [\\"norm\\"]: 1 }) to < Abc {...{ [kek]: 0 }} {...{ [\\"norm\\" + lol]: 1 }} norm={1} />
 
-// to handle h(Abc, { [kek]: 0, [\\"norm\\"]: 1 }) to < Abc {...{ [kek]: 0 }} {...{ [\\"norm\\" + lol]: 1 }} norm={1} />
 const ComplexComputedAttibutesHandling = () => (
-  <Abc {...{ [kek]: 0 }} {...{ ['norm' + lol]: 1 }} ok={2} />
+  <Abc
+    {...{
+      [kek]: 0
+    }}
+    {...{
+      ['norm' + lol]: 1
+    }}
+    ok={2}
+  />
+); // Handle multi classNames css modules (Rev only)
+
+<div className={\`\${styles.bar} \${styles.fuzz} \${styles.stuff}\`}>bar fuzz</div>; // Should process children but ignore computed parent
+
+h(
+  \`calcualted \${stuff}\`,
+  {
+    amazing: 'stuff'
+  },
+  [
+    <h1 />,
+    <h2 />,
+    <h3 />,
+    <div>
+      <div />
+    </div>
+  ]
 );
-
-// Handle multi classNames css modules (Rev only)
-<div className={\`\${styles.bar} \${styles.fuzz} \${styles.stuff}\`}>bar fuzz</div>;
-
-// Should process children but ignore computed parent
-h(\`calcualted \${stuff}\`, { amazing: 'stuff' }, [
-  <h1 />,
-  <h2 />,
-  <h3 />,
-  <div>
-    <div />
-  </div>
-]);
 
 class Comp extends React.Component {
   render() {
@@ -1181,6 +1222,12 @@ const ThirdArgOnIgnoredIsNotArray = () =>
     children
   );
   
+  
+h(isCanada ? doStuff : doAnotherStuff, { someProp: true })
+h('div', isCanada ? someProps : anotherProps)
+h('div', isCanada ? someProps : anotherProps, \\"SomeChildren\\")
+
+
 const SecondArgOnIgnoredIsNotArray = () =>
   h(ANIMATIONS[country], children);
   
@@ -1250,9 +1297,11 @@ handleArrays = [
 ];
 
 const ClassNameWithDashesSingle = props => <div className=\\"this-is-dashes\\" />;
+
 const ClassNameWithDashesMulti = props => (
   <div className=\\"this-is-dashes dash-afterDash\\" />
 );
+
 const JustPropField = (
   <Stuff children={<FormattedMessage {...commonMessages.learnMore} />} />
 );
@@ -1262,22 +1311,20 @@ function HyperscriptAsRegularFunction(props) {
 }
 
 const HyperscriptAsVariable = <div className=\\"lol\\" someProp=\\"lol\\" />;
-
 const HyperscriptWithExpressionAsChildren = (
   <AnotherComponent foo=\\"bar\\" bar={() => ({})} shouldRender={thing.length > 0}>
-    {arr.map(() => <h1 />)}
+    {arr.map(() => (
+      <h1 />
+    ))}
   </AnotherComponent>
-);
+); // Should be ignored from transforming
 
-// Should be ignored from transforming
 const FirstArgTemplateLiteralWithComputedExpressions = h(\`div.lol\${stuff}\`, {
   someProp: 'lol'
-});
+}); // Not computed so should be fine
 
-// Not computed so should be fine
-const FirstArgTemplateLiteral = <div className=\\"lol\\" someProp=\\"lol\\" />;
+const FirstArgTemplateLiteral = <div className=\\"lol\\" someProp=\\"lol\\" />; // Should be ignored
 
-// Should be ignored
 const WhenFirstArgumentIsFunctionThatIsCalled = () =>
   h(getLoadableAnimation('pageCareersDeliver'), [h(fn())]);
 
@@ -1292,14 +1339,17 @@ const ComputedRootWithObjectPropertyDeclaration = () =>
           <div className=\\"flag\\">
             <RoundFlag mix=\\"flag\\" size=\\"xs\\" code={currencyData.countryCode} />
             {// Computed not root should be wrapped in {}
-            h(ANIMATIONS[country], { className: 'lol' })}
+            h(ANIMATIONS[country], {
+              className: 'lol'
+            })}
           </div>
         </div>
       )
-    },
-    // This first children in array will be ignored FOR THIS UGLY HACK IN INDEX
+    }, // This first children in array will be ignored FOR THIS UGLY HACK IN INDEX
     [
-      h(ANIMATIONS[country], { className: 'lol' }),
+      h(ANIMATIONS[country], {
+        className: 'lol'
+      }),
       <h1 />,
       kek && mem,
       surreal ? lol : kek,
@@ -1316,10 +1366,15 @@ const ThirdArgOnIgnoredIsNotArray = () =>
     ANIMATIONS[country],
     {
       className: 'lol'
-    },
-    // This first children in array will be ignored FOR THIS UGLY HACK IN INDEX
+    }, // This first children in array will be ignored FOR THIS UGLY HACK IN INDEX
     children
   );
+
+h(isCanada ? doStuff : doAnotherStuff, {
+  someProp: true
+});
+<div>{isCanada ? someProps : anotherProps}</div>;
+<div {...(isCanada ? someProps : anotherProps)}>SomeChildren</div>;
 
 const SecondArgOnIgnoredIsNotArray = () => h(ANIMATIONS[country], children);
 
@@ -1327,25 +1382,36 @@ const MultiMemberExpressionWithClosingTag = () => (
   <Pricing.lol.kek className={className}>
     <h1 />
   </Pricing.lol.kek>
-);
+); // to handle h(Abc, { [kek]: 0, [\\"norm\\"]: 1 }) to < Abc {...{ [kek]: 0 }} {...{ [\\"norm\\" + lol]: 1 }} norm={1} />
 
-// to handle h(Abc, { [kek]: 0, [\\"norm\\"]: 1 }) to < Abc {...{ [kek]: 0 }} {...{ [\\"norm\\" + lol]: 1 }} norm={1} />
 const ComplexComputedAttibutesHandling = () => (
-  <Abc {...{ [kek]: 0 }} {...{ ['norm' + lol]: 1 }} ok={2} />
+  <Abc
+    {...{
+      [kek]: 0
+    }}
+    {...{
+      ['norm' + lol]: 1
+    }}
+    ok={2}
+  />
+); // Handle multi classNames css modules (Rev only)
+
+<div className=\\"bar fuzz stuff\\">bar fuzz</div>; // Should process children but ignore computed parent
+
+h(
+  \`calcualted \${stuff}\`,
+  {
+    amazing: 'stuff'
+  },
+  [
+    <h1 />,
+    <h2 />,
+    <h3 />,
+    <div>
+      <div />
+    </div>
+  ]
 );
-
-// Handle multi classNames css modules (Rev only)
-<div className=\\"bar fuzz stuff\\">bar fuzz</div>;
-
-// Should process children but ignore computed parent
-h(\`calcualted \${stuff}\`, { amazing: 'stuff' }, [
-  <h1 />,
-  <h2 />,
-  <h3 />,
-  <div>
-    <div />
-  </div>
-]);
 
 class Comp extends React.Component {
   render() {
@@ -1457,6 +1523,7 @@ import hx from 'hx';
 import React from 'react';
 import h from 'h';
 import hx from 'hx';
+
 const SecondArgOnIgnoredIsNotArray = () => h(ANIMATIONS[country], children);
 
 "
@@ -1473,6 +1540,7 @@ import hx from 'hx';
 import React from 'react';
 import h from 'h';
 import hx from 'hx';
+
 const SecondArgOnIgnoredIsNotArray = () => h(ANIMATIONS[country], children);
 
 "
@@ -1496,6 +1564,7 @@ import hx from 'hx';
 import React from 'react';
 import h from 'h';
 import hx from 'hx';
+
 const ThirdArgOnIgnoredIsNotArray = () =>
   h(
     ANIMATIONS[country],
@@ -1526,6 +1595,7 @@ import hx from 'hx';
 import React from 'react';
 import h from 'h';
 import hx from 'hx';
+
 const ThirdArgOnIgnoredIsNotArray = () =>
   h(
     ANIMATIONS[country],
@@ -1598,6 +1668,7 @@ import hx from 'hx';
 import React from 'react';
 import h from 'h';
 import hx from 'hx';
+
 const MultiMemberExpressionWithClosingTag = () => (
   <Pricing.lol className={className} />
 );
@@ -1617,6 +1688,7 @@ import hx from 'hx';
 import React from 'react';
 import h from 'h';
 import hx from 'hx';
+
 const MultiMemberExpressionWithClosingTag = () => (
   <Pricing.lol className={className} />
 );
@@ -1636,6 +1708,7 @@ import hx from 'hx';
 import React from 'react';
 import h from 'h';
 import hx from 'hx';
+
 const MultiMemberExpressionWithClosingTag = () => (
   <Pricing.lol className={className}>
     <h1 />
@@ -1657,6 +1730,7 @@ import hx from 'hx';
 import React from 'react';
 import h from 'h';
 import hx from 'hx';
+
 const MultiMemberExpressionWithClosingTag = () => (
   <Pricing.lol className={className}>
     <h1 />
@@ -1677,6 +1751,7 @@ import hx from 'hx';
 import React from 'react';
 import h from 'h';
 import hx from 'hx';
+
 const StatelessComponent = props => <h1 />;
 
 "
@@ -1693,6 +1768,7 @@ import hx from 'hx';
 import React from 'react';
 import h from 'h';
 import hx from 'hx';
+
 const StatelessComponent = props => <h1 />;
 
 "
@@ -1711,6 +1787,7 @@ import hx from 'hx';
 import React from 'react';
 import h from 'h';
 import hx from 'hx';
+
 const StatelessWithReturn = props => {
   return <div className={styles.class} />;
 };
@@ -1731,6 +1808,7 @@ import hx from 'hx';
 import React from 'react';
 import h from 'h';
 import hx from 'hx';
+
 const StatelessWithReturn = props => {
   return <div className=\\"class\\" />;
 };
@@ -1751,6 +1829,7 @@ import hx from 'hx';
 import React from 'react';
 import h from 'h';
 import hx from 'hx';
+
 const HandlesAssignment = ({ title }) => {
   title = <span />;
 };
@@ -1771,6 +1850,7 @@ import hx from 'hx';
 import React from 'react';
 import h from 'h';
 import hx from 'hx';
+
 const HandlesAssignment = ({ title }) => {
   title = <span />;
 };
@@ -1833,6 +1913,7 @@ import hx from 'hx';
 import React from 'react';
 import h from 'h';
 import hx from 'hx';
+
 const ClassNameWithDashesMulti = props => (
   <div className={\`\${styles['this-is-dashes']} \${styles['dash-afterDash']}\`} />
 );
@@ -1851,6 +1932,7 @@ import hx from 'hx';
 import React from 'react';
 import h from 'h';
 import hx from 'hx';
+
 const ClassNameWithDashesMulti = props => (
   <div className=\\"this-is-dashes dash-afterDash\\" />
 );
@@ -1943,7 +2025,10 @@ import React from 'react';
 import h from 'h';
 import hx from 'hx';
 <div attr={true && <div shouldRender={true} />} />;
-h('div' + 'div', { className, field: true && <div shouldRender={true} /> });
+h('div' + 'div', {
+  className,
+  field: true && <div shouldRender={true} />
+});
 
 "
 `;
@@ -1961,7 +2046,10 @@ import React from 'react';
 import h from 'h';
 import hx from 'hx';
 <div attr={<div shouldRender={true} />} />;
-h('div' + 'div', { className, field: <div shouldRender={true} /> });
+h('div' + 'div', {
+  className,
+  field: <div shouldRender={true} />
+});
 
 "
 `;
@@ -1979,7 +2067,10 @@ import React from 'react';
 import h from 'h';
 import hx from 'hx';
 h('div' + 'div', [true && <div shouldRender={true} />]);
-h('div' + 'div', { className, field: true && <div shouldRender={true} /> });
+h('div' + 'div', {
+  className,
+  field: true && <div shouldRender={true} />
+});
 
 "
 `;
@@ -1997,7 +2088,10 @@ import React from 'react';
 import h from 'h';
 import hx from 'hx';
 h('div' + 'div', [<div shouldRender={true} />]);
-h('div' + 'div', { className, field: <div shouldRender={true} /> });
+h('div' + 'div', {
+  className,
+  field: <div shouldRender={true} />
+});
 
 "
 `;
@@ -2015,7 +2109,13 @@ import React from 'react';
 import h from 'h';
 import hx from 'hx';
 h('div' + 'div', [true && <div shouldRender={true} />]);
-h('div' + 'div', { className }, [true && <div shouldRender={true} />, <div />]);
+h(
+  'div' + 'div',
+  {
+    className
+  },
+  [true && <div shouldRender={true} />, <div />]
+);
 
 "
 `;
@@ -2033,7 +2133,13 @@ import React from 'react';
 import h from 'h';
 import hx from 'hx';
 h('div' + 'div', [<div shouldRender={true} />]);
-h('div' + 'div', { className }, [<div shouldRender={true} />, <div />]);
+h(
+  'div' + 'div',
+  {
+    className
+  },
+  [<div shouldRender={true} />, <div />]
+);
 
 "
 `;
@@ -2049,6 +2155,7 @@ import hx from 'hx';
 import React from 'react';
 import h from 'h';
 import hx from 'hx';
+
 const ClassNameWithDashesSingle = props => (
   <div className={styles['this-is-dashes']} />
 );
@@ -2067,6 +2174,7 @@ import hx from 'hx';
 import React from 'react';
 import h from 'h';
 import hx from 'hx';
+
 const ClassNameWithDashesSingle = props => <div className=\\"this-is-dashes\\" />;
 
 "
@@ -2110,6 +2218,7 @@ import hx from 'hx';
 import React from 'react';
 import h from 'h';
 import hx from 'hx';
+
 const ComputedRootWithObjectPropertyDeclaration = () =>
   h(
     ANIMATIONS[country],
@@ -2120,14 +2229,17 @@ const ComputedRootWithObjectPropertyDeclaration = () =>
           <div className={styles.flag}>
             <RoundFlag mix=\\"flag\\" size=\\"xs\\" code={currencyData.countryCode} />
             {// Computed not root should be wrapped in {}
-            h(ANIMATIONS[country], { className: 'lol' })}
+            h(ANIMATIONS[country], {
+              className: 'lol'
+            })}
           </div>
         </div>
       )
-    },
-    // This first children in array will be ignored
+    }, // This first children in array will be ignored
     [
-      h(ANIMATIONS[country], { className: 'lol' }),
+      h(ANIMATIONS[country], {
+        className: 'lol'
+      }),
       <h1 />,
       kek && mem,
       surreal ? lol : kek,
@@ -2178,6 +2290,7 @@ import hx from 'hx';
 import React from 'react';
 import h from 'h';
 import hx from 'hx';
+
 const ComputedRootWithObjectPropertyDeclaration = () =>
   h(
     ANIMATIONS[country],
@@ -2188,14 +2301,17 @@ const ComputedRootWithObjectPropertyDeclaration = () =>
           <div className=\\"flag\\">
             <RoundFlag mix=\\"flag\\" size=\\"xs\\" code={currencyData.countryCode} />
             {// Computed not root should be wrapped in {}
-            h(ANIMATIONS[country], { className: 'lol' })}
+            h(ANIMATIONS[country], {
+              className: 'lol'
+            })}
           </div>
         </div>
       )
-    },
-    // This first children in array will be ignored
+    }, // This first children in array will be ignored
     [
-      h(ANIMATIONS[country], { className: 'lol' }),
+      h(ANIMATIONS[country], {
+        className: 'lol'
+      }),
       <h1 />,
       kek && mem,
       surreal ? lol : kek,
@@ -2221,8 +2337,8 @@ const FirstArgTemplateLiteralWithComputedExpressions = h(\`div.lol\${stuff}\`, {
 
 import React from 'react';
 import h from 'h';
-import hx from 'hx';
-// Should be ignored from transforming
+import hx from 'hx'; // Should be ignored from transforming
+
 const FirstArgTemplateLiteralWithComputedExpressions = h(\`div.lol\${stuff}\`, {
   someProp: 'lol'
 });
@@ -2243,8 +2359,8 @@ const FirstArgTemplateLiteralWithComputedExpressions = h(\`div.lol\${stuff}\`, {
 
 import React from 'react';
 import h from 'h';
-import hx from 'hx';
-// Should be ignored from transforming
+import hx from 'hx'; // Should be ignored from transforming
+
 const FirstArgTemplateLiteralWithComputedExpressions = h(\`div.lol\${stuff}\`, {
   someProp: 'lol'
 });
@@ -2265,7 +2381,9 @@ import hx from 'hx';
 import React from 'react';
 import h from 'h';
 import hx from 'hx';
-h(isCanada ? doStuff : doAnotherStuff, { someProp: true });
+h(isCanada ? doStuff : doAnotherStuff, {
+  someProp: true
+});
 <div>{isCanada ? someProps : anotherProps}</div>;
 <div {...(isCanada ? someProps : anotherProps)}>SomeChildren</div>;
 
@@ -2285,7 +2403,9 @@ import hx from 'hx';
 import React from 'react';
 import h from 'h';
 import hx from 'hx';
-h(isCanada ? doStuff : doAnotherStuff, { someProp: true });
+h(isCanada ? doStuff : doAnotherStuff, {
+  someProp: true
+});
 <div>{isCanada ? someProps : anotherProps}</div>;
 <div {...(isCanada ? someProps : anotherProps)}>SomeChildren</div>;
 
@@ -2304,6 +2424,7 @@ const WhenFirstArgumentIsFunctionThatIsCalled = () =>
 import React from 'react';
 import h from 'h';
 import hx from 'hx';
+
 const WhenFirstArgumentIsFunctionThatIsCalled = () =>
   h(getLoadableAnimation('pageCareersDeliver'), [h(fn())]);
 
@@ -2322,6 +2443,7 @@ const WhenFirstArgumentIsFunctionThatIsCalled = () =>
 import React from 'react';
 import h from 'h';
 import hx from 'hx';
+
 const WhenFirstArgumentIsFunctionThatIsCalled = () =>
   h(getLoadableAnimation('pageCareersDeliver'), [h(fn())]);
 
@@ -2344,14 +2466,20 @@ h(\`calcualted \${stuff}\`, { amazing: \\"stuff\\" }, [
 import React from 'react';
 import h from 'h';
 import hx from 'hx';
-h(\`calcualted \${stuff}\`, { amazing: 'stuff' }, [
-  <h1 />,
-  <h2 />,
-  <h3 />,
-  <div>
-    <div />
-  </div>
-]);
+h(
+  \`calcualted \${stuff}\`,
+  {
+    amazing: 'stuff'
+  },
+  [
+    <h1 />,
+    <h2 />,
+    <h3 />,
+    <div>
+      <div />
+    </div>
+  ]
+);
 
 "
 `;
@@ -2372,14 +2500,20 @@ h(\`calcualted \${stuff}\`, { amazing: \\"stuff\\" }, [
 import React from 'react';
 import h from 'h';
 import hx from 'hx';
-h(\`calcualted \${stuff}\`, { amazing: 'stuff' }, [
-  <h1 />,
-  <h2 />,
-  <h3 />,
-  <div>
-    <div />
-  </div>
-]);
+h(
+  \`calcualted \${stuff}\`,
+  {
+    amazing: 'stuff'
+  },
+  [
+    <h1 />,
+    <h2 />,
+    <h3 />,
+    <div>
+      <div />
+    </div>
+  ]
+);
 
 "
 `;
@@ -2469,6 +2603,7 @@ import hx from 'hx';
 import React from 'react';
 import h from 'h';
 import hx from 'hx';
+
 function HyperscriptAsRegularFunction(props) {
   return <h1 />;
 }
@@ -2489,6 +2624,7 @@ import hx from 'hx';
 import React from 'react';
 import h from 'h';
 import hx from 'hx';
+
 function HyperscriptAsRegularFunction(props) {
   return <h1 />;
 }
@@ -2553,7 +2689,9 @@ import h from 'h';
 import hx from 'hx';
 const HyperscriptWithExpressionAsChildren = thing.length > 0 && (
   <AnotherComponent foo=\\"bar\\" bar={() => ({})} shouldRender={thing.length > 0}>
-    {arr.map(() => <h1 />)}
+    {arr.map(() => (
+      <h1 />
+    ))}
   </AnotherComponent>
 );
 
@@ -2577,7 +2715,9 @@ import h from 'h';
 import hx from 'hx';
 const HyperscriptWithExpressionAsChildren = (
   <AnotherComponent foo=\\"bar\\" bar={() => ({})} shouldRender={thing.length > 0}>
-    {arr.map(() => <h1 />)}
+    {arr.map(() => (
+      <h1 />
+    ))}
   </AnotherComponent>
 );
 
@@ -2596,8 +2736,17 @@ const ComplexComputedAttibutesHandling = () =>
 import React from 'react';
 import h from 'h';
 import hx from 'hx';
+
 const ComplexComputedAttibutesHandling = () => (
-  <Abc {...{ [kek]: 0 }} {...{ ['norm' + lol]: 1 }} ok={2} />
+  <Abc
+    {...{
+      [kek]: 0
+    }}
+    {...{
+      ['norm' + lol]: 1
+    }}
+    ok={2}
+  />
 );
 
 "
@@ -2615,8 +2764,17 @@ const ComplexComputedAttibutesHandling = () =>
 import React from 'react';
 import h from 'h';
 import hx from 'hx';
+
 const ComplexComputedAttibutesHandling = () => (
-  <Abc {...{ [kek]: 0 }} {...{ ['norm' + lol]: 1 }} ok={2} />
+  <Abc
+    {...{
+      [kek]: 0
+    }}
+    {...{
+      ['norm' + lol]: 1
+    }}
+    ok={2}
+  />
 );
 
 "

@@ -1,6 +1,7 @@
 "use strict";
 
-const t = require("babel-core").types;
+const t = require("@babel/core").types;
+const declare = require("@babel/helper-plugin-utils").declare;
 const getTagAndClassNamesAndId = require("./utils").getTagAndClassNamesAndId;
 const revTransform = require("./rev");
 const getOption = require("./utils").getOption;
@@ -26,7 +27,7 @@ const bJsxAttr = (prop, expressionOrValue) => {
 const bJsxAttributes = objectExpression => {
   return objectExpression.properties.map(node => {
     const { key, value, argument } = node;
-    if (t.isSpreadProperty(node) || t.isSpreadElement(node)) {
+    if (t.isSpreadElement(node) || t.isSpreadElement(node)) {
       return t.JSXSpreadAttribute(argument);
     } else if (t.isProperty(node) && node.computed && !t.isStringLiteral(key)) {
       // to handle h(Abc, { [kek]: 0, ["norm"]: 1 }) to <Abc {...{ [kek]: 0 }} norm={1} />
@@ -128,7 +129,7 @@ const transformHyperscriptToJsx = (node, isTopLevelCall) => {
       ? convertToStringLiteral(intermediateFirstArg)
       : intermediateFirstArg;
   const isFirstArgIsConditionalExpression =
-    firstArgument.type === "ConditionalExpression"
+    firstArgument.type === "ConditionalExpression";
 
   // If firstArg is computed should be ignored, but inside the JSX should be wrapped into JSXExprContainer
   if (
@@ -212,12 +213,13 @@ const threeArgumentsCase = (firstArg, secondArg, thirdArg) => {
 };
 
 let isCssModules = false;
-module.exports = function() {
+module.exports = declare(api => {
   return {
+    name: "hyperscript-to-jsx",
     manipulateOptions(opts, parserOpts) {
       parserOpts.plugins.push("asyncGenerators");
       parserOpts.plugins.push("classProperties");
-      parserOpts.plugins.push("decorators");
+      parserOpts.plugins.push("decorators-legacy");
       parserOpts.plugins.push("doExpressions");
       parserOpts.plugins.push("dynamicImport");
       parserOpts.plugins.push("flow");
@@ -324,4 +326,4 @@ module.exports = function() {
       }
     }
   };
-};
+});

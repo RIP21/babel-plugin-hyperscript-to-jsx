@@ -6,21 +6,27 @@
   "license": "MIT",
   "author": "https://github.com/RIP21/",
   "main": "src/index.js",
-  "keywords": ["babel-plugin"],
-  "peerDependencies": {
-    "babel-core": "^6.26.0"
-  },
+  "keywords": [
+    "babel-plugin",
+    "babel-codemod",
+    "codemod",
+    "hyperscript",
+    "jsx"
+  ],
   "devDependencies": {
-    "babel-core": "^6.26.0",
-    "babel-plugin-tester": "^5.0.0",
-    "jest": "^22.4.2",
-    "prettier": "^1.13.4"
+    "babel-plugin-tester": "7.0.4",
+    "jest": "^25.1.0",
+    "np": "^6.0.0",
+    "prettier": "^1.19.1"
   },
   "scripts": {
     "test": "jest",
-    "start": "node manualRun.js"
+    "start": "node manualRun.js",
+    "release": "np"
   },
   "dependencies": {
-    "string-extract-class-names": "^4.0.6"
+    "@babel/core": "^7.8.4",
+    "string-extract-class-names": "^4.0.6",
+    "@babel/helper-plugin-utils": "^7.8.3"
   }
 }

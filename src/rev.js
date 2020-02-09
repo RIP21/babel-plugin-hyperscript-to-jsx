@@ -1,6 +1,6 @@
 "use strict";
 
-const t = require("babel-core").types;
+const t = require("@babel/core").types;
 const getTagAndClassNamesAndId = require("./utils").getTagAndClassNamesAndId;
 let isCssModules = false;
 
@@ -24,7 +24,7 @@ const bJsxAttr = (prop, expressionOrValue) => {
 const bJsxAttributes = objectExpression => {
   return objectExpression.properties.map(node => {
     const { key, value, argument } = node;
-    if (t.isSpreadProperty(node) || t.isSpreadElement(node)) {
+    if (t.isSpreadElement(node) || t.isSpreadElement(node)) {
       return t.JSXSpreadAttribute(argument);
     } else if (t.isProperty(node) && node.computed && !t.isStringLiteral(key)) {
       // to handle h(Abc, { [kek]: 0, ["norm"]: 1 }) to <Abc {...{ [kek]: 0 }} norm={1} />

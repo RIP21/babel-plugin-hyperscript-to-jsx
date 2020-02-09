@@ -270,16 +270,16 @@ class Comp extends React.Component {
 
 ## Usage
 
-Install [babel-codemod](https://github.com/square/babel-codemod) `npm i -g babel-codemod`
+Install [codemod](https://github.com/codemod-js/codemod) `npm install -g @codemod/cli`
 
 Then install in root of your project `npm install babel-plugin-hyperscript-to-jsx`
 
-Run it like that from node_modules hence:
+Run it like that from node_modules:
 ```
 codemod --plugin ./node_modules/babel-plugin-hyperscript-to-jsx/src/index.js ./src
 ```
 
-Also you may like to pretty print it using prettier instead of recast
+Also, you may like to pretty print it immediately using prettier
 ```
 codemod --plugin ./node_modules/babel-plugin-hyperscript-to-jsx/src/index.js ./src --printer prettier
 ```
@@ -287,6 +287,11 @@ codemod --plugin ./node_modules/babel-plugin-hyperscript-to-jsx/src/index.js ./s
 Remove `babel-plugin-hyperscript-to-jsx` from `package.json`
 
 If there is any issues, let me know in the issues tab here at GitHub.
+
+You can run it against exact file too e.g. `./src/index.js`
+```
+codemod --plugin ./node_modules/babel-plugin-hyperscript-to-jsx/src/index.js ./src/index.js --printer prettier
+```
 
 ## Limitations
 
@@ -307,10 +312,10 @@ Fix all that by yourself :)
 
 (it's possible but will require further analysis of AST with hardcore traversal and I don't think it worth it)
 
-## Integration with WebStorm/VS Code to do file by file
+## Integration with WebStorm/VS Code to do it nicely file by file
 Preconditions:
 ```
-npm i -g babel-core babel-codemod babel-plugin-hyperscript-to-jsx
+npm i -g @codemod/cli babel-plugin-hyperscript-to-jsx
 ```
 
 ### WebStorm:
@@ -319,7 +324,7 @@ npm i -g babel-core babel-codemod babel-plugin-hyperscript-to-jsx
 ```
 Name: h to JSX
 Program: codemod
-Arguments: -p /usr/local/lib/node_modules/babel-plugin-hyperscript-to-jsx/src/index.js$FilePathRelativeToProjectRoot$
+Arguments: -p <your global node_modules location>/babel-plugin-hyperscript-to-jsx/src/index.js $FilePathRelativeToProjectRoot$
 Working directory: $ProjectFileDir$
 
 In advanced settings:
@@ -345,7 +350,7 @@ Tick on: Sync file after execution
         {
             "label": "H to JSX",
             "type": "shell",
-            "command": "codemod -p /usr/local/lib/node_modules/babel-plugin-hyperscript-to-jsx/src/index.js ${file}"
+            "command": "codemod -p <your global node_modules location>/babel-plugin-hyperscript-to-jsx/src/index.js ${file}"
         }
     ]
 }
